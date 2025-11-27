@@ -1,8 +1,10 @@
 package pij.tile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 /**
  * Represents a bag of tiles for the game.
  * The tile bag contains all tiles according to the game specification
@@ -21,151 +23,68 @@ public class TileBag {
         initialiseOriginalTiles();
         shuffle();
     }
+
     /**
      * Initialises the tile bag according to the game specification.
      */
     private void initialiseOriginalTiles() {
-        // 8 x A1
-        for (int i = 0; i < 8; i++) {
-            tileList.add(new Tile('A', 1));
-        }
+        Object[][] tileTypes =
+                {
+                        {'A', 1, 8},
+                        {'B', 3, 2},
+                        {'C', 4, 2},
+                        {'D', 2, 4},
+                        {'E', 2, 9},
+                        {'F', 4, 3},
+                        {'G', 3, 4},
+                        {'H', 4, 3},
+                        {'I', 1, 9},
+                        {'J', 11, 1},
+                        {'K', 6, 2},
+                        {'L', 1, 4},
+                        {'M', 3, 2},
+                        {'N', 1, 7},
+                        {'O', 1, 7},
+                        {'P', 3, 2},
+                        {'Q', 12, 1},
+                        {'R', 1, 6},
+                        {'S', 1, 4},
+                        {'T', 1, 5},
+                        {'U', 1, 5},
+                        {'V', 4, 2},
+                        {'W', 4, 2},
+                        {'X', 9, 1},
+                        {'Y', 5, 2},
+                        {'Z', 9, 1},
+                        {'_', 8, 2}
+                };
 
-        // 2 x B3
-        for (int i = 0; i < 2; i++) {
-            tileList.add(new Tile('B', 3));
-        }
-
-        // 2 x C4
-        for (int i = 0; i < 2; i++) {
-            tileList.add(new Tile('C', 4));
-        }
-
-        // 4 x D2
-        for (int i = 0; i < 4; i++) {
-            tileList.add(new Tile('D', 2));
-        }
-
-        // 9 x E2
-        for (int i = 0; i < 9; i++) {
-            tileList.add(new Tile('E', 2));
-        }
-
-        // 3 x F4
-        for (int i = 0; i < 3; i++) {
-            tileList.add(new Tile('F', 4));
-        }
-
-        // 4 x G3
-        for (int i = 0; i < 4; i++) {
-            tileList.add(new Tile('G', 3));
-        }
-
-        // 3 x H4
-        for (int i = 0; i < 3; i++) {
-            tileList.add(new Tile('H', 4));
-        }
-
-        // 9 x I1
-        for (int i = 0; i < 9; i++) {
-            tileList.add(new Tile('I', 1));
-        }
-
-        // 1 x J11
-        tileList.add(new Tile('J', 11));
-
-        // 2 x K6
-        for (int i = 0; i < 2; i++) {
-            tileList.add(new Tile('K', 6));
-        }
-
-        // 4 x L1
-        for (int i = 0; i < 4; i++) {
-            tileList.add(new Tile('L', 1));
-        }
-
-        // 2 x M3
-        for (int i = 0; i < 2; i++) {
-            tileList.add(new Tile('M', 3));
-        }
-
-        // 7 x N1
-        for (int i = 0; i < 7; i++) {
-            tileList.add(new Tile('N', 1));
-        }
-
-        // 7 x O1
-        for (int i = 0; i < 7; i++) {
-            tileList.add(new Tile('O', 1));
-        }
-
-        // 2 x P3
-        for (int i = 0; i < 2; i++) {
-            tileList.add(new Tile('P', 3));
-        }
-
-        // 1 x Q12
-        tileList.add(new Tile('Q', 12));
-
-        // 6 x R1
-        for (int i = 0; i < 6; i++) {
-            tileList.add(new Tile('R', 1));
-        }
-
-        // 4 x S1
-        for (int i = 0; i < 4; i++) {
-            tileList.add(new Tile('S', 1));
-        }
-
-        // 5 x T1
-        for (int i = 0; i < 5; i++) {
-            tileList.add(new Tile('T', 1));
-        }
-
-        // 5 x U1
-        for (int i = 0; i < 5; i++) {
-            tileList.add(new Tile('U', 1));
-        }
-
-        // 2 x V4
-        for (int i = 0; i < 2; i++) {
-            tileList.add(new Tile('V', 4));
-        }
-
-        // 2 x W4
-        for (int i = 0; i < 2; i++) {
-            tileList.add(new Tile('W', 4));
-        }
-
-        // 1 x X9
-        tileList.add(new Tile('X', 9));
-
-        // 2 x Y5
-        for (int i = 0; i < 2; i++) {
-            tileList.add(new Tile('Y', 5));
-        }
-
-        // 1 x Z9
-        tileList.add(new Tile('Z', 9));
-
-        // 2 x _8
-        for (int i = 0; i < 2; i++) {
-            tileList.add(new Tile('_', 8));
+        for (Object[] tile : tileTypes) {
+            char letter = (char) tile[0];
+            int value = (int) tile[1];
+            int count = (int) tile[2];
+            for (int j = 0; j < count; j++) {
+                tileList.add(new Tile(letter, value));
+            }
         }
     }
+
     /**
      * Shuffles all tiles in the bag to ensure randomised order when drawing tiles.
      */
     public void shuffle() {
         Collections.shuffle(tileList);
     }
+
     /**
      * Returns a string representation of the current tiles in the bag.
      *
      * @return a string showing all tiles currently in the bag
      */
-    public String currentTilebag(){
+    public String currentTilebag() {
         return tileList.toString();
     }
+
     /**
      * Checks if the tile bag is empty.
      *
@@ -190,12 +109,12 @@ public class TileBag {
      * @param count the number of tiles to draw
      * @return a list of drawn tiles
      */
-    public List<Tile> drawTiles(int count){
+    public List<Tile> drawTiles(int count) {
         List<Tile> drawnTiles = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            drawnTiles.add(tileList.remove(tileList.size()-1));
+            drawnTiles.add(tileList.remove(tileList.size() - 1));
         }
-       return drawnTiles;
+        return drawnTiles;
     }
 
 }
