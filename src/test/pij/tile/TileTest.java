@@ -10,6 +10,7 @@ public class TileTest {
         Tile tile = new Tile('A',2);
         assertEquals('A',tile.getLetter());
         assertEquals(2,tile.getValue());
+        assertEquals("[A2]",tile.toString());
     }
 
 
