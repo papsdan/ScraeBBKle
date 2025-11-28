@@ -16,19 +16,17 @@ public class Square {
     }
     @Override
     public String toString() {
+       String prefix = "";
+        if(this.multiplier >= 0 && this.multiplier <= 9) {
+           prefix = " ";
+       } else {
+           prefix = "";
+        };
         switch (this.squareType) {
             case PREMIUM_LETTER:
-                if (this.multiplier >= 0 && this.multiplier <= 9) {
-                    return " " + this.multiplier;
-                } else {
-                    return this.multiplier + "";
-                }
+                return prefix + this.multiplier;
             case PREMIUM_WORD:
-                if (this.multiplier >= 0 && this.multiplier <= 9) {
-                    return " " + this.multiplier + "!";
-                } else {
-                    return this.multiplier + "!";
-                }
+                return prefix + this.multiplier + "!";
             default:
                 return " . ";
         }
