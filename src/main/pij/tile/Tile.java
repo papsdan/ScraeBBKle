@@ -5,6 +5,7 @@ public class Tile {
     private char letter;
     private final int value;
     private boolean isWildcard;
+    private boolean isWildcardAssigned;
 
     public Tile(char letter, int value) {
         this.letter = letter;
@@ -12,6 +13,7 @@ public class Tile {
         if(letter == '_'){
             this.isWildcard = true;
         }
+        this.isWildcardAssigned = false;
     }
     public char getLetter() {
         return letter;
@@ -23,8 +25,9 @@ public class Tile {
         return isWildcard;
     }
     public void setWildcardLetter(char letter) {
-        if(this.isWildcard){
+        if(this.isWildcard && !this.isWildcardAssigned){
             this.letter = letter;
+            this.isWildcardAssigned = true;
         }
     }
     @Override
