@@ -9,10 +9,24 @@ public class Square {
             throw new IllegalArgumentException("Premium square value must be between -9 and 99");
         }
         this.multiplier = multiplier;
+        if (squareType == SquareType.REGULAR) {
+            throw new IllegalArgumentException("Regular squares are not supposed to have multiples");
+        }
         this.squareType = squareType;
     }
+
+    public Square(SquareType squareType) {
+        if (squareType != SquareType.REGULAR) {
+            throw new IllegalArgumentException("Premium tiles must include multiples parameter");
+        }
+        this.squareType = SquareType.REGULAR;
+    }
+
     public int getmultiplier() {
         return multiplier;
+    }
+    public SquareType getsquareType(){
+        return this.squareType;
     }
     @Override
     public String toString() {
