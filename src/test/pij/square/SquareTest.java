@@ -30,10 +30,10 @@ public class SquareTest {
         Square square2 = new Square(8, SquareType.PREMIUM_LETTER);
         Square square3 = new Square(-8, SquareType.PREMIUM_LETTER);
         Square square4 = new Square(99, SquareType.PREMIUM_LETTER);
-        assertEquals("12",square.toString());
-        assertEquals(" 8",square2.toString());
-        assertEquals("-8",square3.toString());
-        assertEquals("99",square4.toString());
+        assertEquals("12.",square.toString());
+        assertEquals(" 8.",square2.toString());
+        assertEquals("-8.",square3.toString());
+        assertEquals("99.",square4.toString());
 
 
         Square square5 = new Square(12, SquareType.PREMIUM_WORD);

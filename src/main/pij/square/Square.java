@@ -38,7 +38,7 @@ public class Square {
         };
         switch (this.squareType) {
             case PREMIUM_LETTER:
-                return prefix + this.multiplier;
+                return prefix + this.multiplier + ".";
             case PREMIUM_WORD:
                 return prefix + this.multiplier + "!";
             default:
