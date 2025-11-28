@@ -28,6 +28,9 @@ public class TileTest {
         wildcardTile.setWildcardLetter('a');
         assertEquals('a',wildcardTile.getLetter());
         assertTrue(wildcardTile.isWildcard());
+        wildcardTile.setWildcardLetter('b');
+        assertEquals('a',wildcardTile.getLetter());
+
 
     }
     @Test
@@ -42,7 +45,6 @@ public class TileTest {
         assertEquals("[_8]", wildcardTile.toString());
         wildcardTile.setWildcardLetter('a');
         assertEquals("[a8]", wildcardTile.toString());
-
 
 
     }
