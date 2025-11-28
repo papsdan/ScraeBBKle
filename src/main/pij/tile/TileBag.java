@@ -1,7 +1,6 @@
 package pij.tile;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,14 +11,14 @@ import java.util.List;
  */
 public class TileBag {
 
-    private List<Tile> tileList;
+    private List<Tile> tiles;
 
     /**
      * Constructs a new TileBag with all tiles initialised
      * according to the game specification and shuffled.
      */
     public TileBag() {
-        this.tileList = new ArrayList<>();
+        this.tiles = new ArrayList<>();
         initialiseOriginalTiles();
         shuffle();
     }
@@ -64,7 +63,7 @@ public class TileBag {
             int value = (int) tile[1];
             int count = (int) tile[2];
             for (int j = 0; j < count; j++) {
-                tileList.add(new Tile(letter, value));
+                tiles.add(new Tile(letter, value));
             }
         }
     }
@@ -73,7 +72,7 @@ public class TileBag {
      * Shuffles all tiles in the bag to ensure randomised order when drawing tiles.
      */
     public void shuffle() {
-        Collections.shuffle(tileList);
+        Collections.shuffle(tiles);
     }
 
     /**
@@ -82,7 +81,7 @@ public class TileBag {
      * @return a string showing all tiles currently in the bag
      */
     public String currentTilebag() {
-        return tileList.toString();
+        return tiles.toString();
     }
 
     /**
@@ -91,7 +90,7 @@ public class TileBag {
      * @return true if there are no tiles left, false otherwise
      */
     public boolean isEmpty() {
-        return tileList.isEmpty();
+        return tiles.isEmpty();
     }
 
     /**
@@ -100,9 +99,17 @@ public class TileBag {
      * @return the count of tiles currently in the bag
      */
     public int getRemainingTileCount() {
-        return tileList.size();
+        return tiles.size();
     }
-
+    /**
+     * Draws a single tile from the bag.
+     * The tile is removed from the bag and returned to the caller.
+     *
+     * @return the tile that was drawn from the bag
+     */
+    public Tile drawTile(){
+            return tiles.removeLast();
+    }
     /**
      * Draws a specified number of tiles from the bag.
      *
@@ -112,7 +119,7 @@ public class TileBag {
     public List<Tile> drawTiles(int count) {
         List<Tile> drawnTiles = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            drawnTiles.add(tileList.remove(tileList.size() - 1));
+            drawnTiles.add(drawTile());
         }
         return drawnTiles;
     }
