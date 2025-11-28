@@ -108,7 +108,11 @@ public class TileBag {
      * @return the tile that was drawn from the bag
      */
     public Tile drawTile(){
+        if (getRemainingTileCount() == 0){
+            return null;
+        } else {
             return tiles.removeLast();
+        }
     }
     /**
      * Draws a specified number of tiles from the bag.
@@ -118,7 +122,11 @@ public class TileBag {
      */
     public List<Tile> drawTiles(int count) {
         List<Tile> drawnTiles = new ArrayList<>();
+
         for (int i = 0; i < count; i++) {
+            if (getRemainingTileCount() == 0){
+                return drawnTiles;
+            }
             drawnTiles.add(drawTile());
         }
         return drawnTiles;
