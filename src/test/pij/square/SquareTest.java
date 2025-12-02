@@ -8,45 +8,59 @@ import static org.junit.Assert.assertThrows;
 public class SquareTest {
 
     @Test
-    public void testSquareConstructorPremium(){
-        Square square = new Square(12, SquareType.PREMIUM_LETTER);
-        assertEquals(12,square.getmultiplier());
-        assertEquals(SquareType.PREMIUM_LETTER,square.getsquareType());
-        assertThrows(IllegalArgumentException.class, () -> new Square(100,SquareType.PREMIUM_LETTER));
-        assertThrows(IllegalArgumentException.class, () -> new Square(-10,SquareType.PREMIUM_LETTER));
+    public void testPremiumLetterSquareConstructor(){
+        PremiumLetterSquare square = new PremiumLetterSquare(12);
+        assertEquals(12, square.getMultiplier());
+        assertEquals(SquareType.PREMIUM_LETTER,square.getSquareType());
+        assertThrows(IllegalArgumentException.class, () -> new PremiumLetterSquare(100));
+        assertThrows(IllegalArgumentException.class, () -> new PremiumLetterSquare(-10));
 
     }
     @Test
-    public void testSquareConstructorRegular(){
-        Square square = new Square(SquareType.REGULAR);
-        assertEquals(SquareType.REGULAR,square.getsquareType());
-        assertThrows(IllegalArgumentException.class, () -> new Square(12,SquareType.REGULAR));
-        assertThrows(IllegalArgumentException.class, () -> new Square(SquareType.PREMIUM_WORD));
+    public void testPremiumWordSquareConstructor(){
+        PremiumWordSquare square = new PremiumWordSquare(5);
+        assertEquals(5, square.getMultiplier());
+        assertEquals(SquareType.PREMIUM_WORD, square.getSquareType());
+        assertThrows(IllegalArgumentException.class, () -> new PremiumWordSquare(100));
+        assertThrows(IllegalArgumentException.class, () -> new PremiumWordSquare(-10));
 
     }
+
     @Test
-    public void testSquareToString(){
-        Square square = new Square(12, SquareType.PREMIUM_LETTER);
-        Square square2 = new Square(8, SquareType.PREMIUM_LETTER);
-        Square square3 = new Square(-8, SquareType.PREMIUM_LETTER);
-        Square square4 = new Square(99, SquareType.PREMIUM_LETTER);
-        assertEquals("12.",square.toString());
-        assertEquals(" 8.",square2.toString());
-        assertEquals("-8.",square3.toString());
-        assertEquals("99.",square4.toString());
+    public void testRegularSquareConstructor(){
+        RegularSquare square = new RegularSquare();
+        assertEquals(SquareType.REGULAR, square.getSquareType());
+        assertEquals(1, square.getMultiplier());
+    }
 
+    @Test
+    public void testSquareDisplay(){
+        PremiumLetterSquare square1 = new PremiumLetterSquare(12);
+        assertEquals("12.", square1.getDisplayString());
 
-        Square square5 = new Square(12, SquareType.PREMIUM_WORD);
-        Square square6 = new Square(8, SquareType.PREMIUM_WORD);
-        Square square7 = new Square(-8, SquareType.PREMIUM_WORD);
-        Square square8 = new Square(99, SquareType.PREMIUM_WORD);
-        assertEquals("12!",square5.toString());
-        assertEquals(" 8!",square6.toString());
-        assertEquals("-8!",square7.toString());
-        assertEquals("99!",square8.toString());
+        PremiumLetterSquare square2 = new PremiumLetterSquare(8);
+        assertEquals(" 8.", square2.getDisplayString());
 
-        Square square9 = new Square(SquareType.REGULAR);
-        assertEquals(" . ",square9.toString());
+        PremiumLetterSquare square3 = new PremiumLetterSquare(-8);
+        assertEquals("-8.", square3.getDisplayString());
+
+        PremiumLetterSquare square4 = new PremiumLetterSquare(99);
+        assertEquals("99.", square4.getDisplayString());
+
+        PremiumWordSquare square5 = new PremiumWordSquare(12);
+        assertEquals("12!", square5.getDisplayString());
+
+        PremiumWordSquare square6 = new PremiumWordSquare(8);
+        assertEquals(" 8!", square6.getDisplayString());
+
+        PremiumWordSquare square7 = new PremiumWordSquare(-8);
+        assertEquals("-8!", square7.getDisplayString());
+
+        PremiumWordSquare square8 = new PremiumWordSquare(99);
+        assertEquals("99!", square8.getDisplayString());
+
+        RegularSquare square9 = new RegularSquare();
+        assertEquals(" . ", square9.getDisplayString());
 
     }
 
