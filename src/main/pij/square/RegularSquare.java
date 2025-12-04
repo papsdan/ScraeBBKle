@@ -1,6 +1,11 @@
 package pij.square;
 
 public class RegularSquare extends Square {
+
+    public  RegularSquare() {
+        super(SquareType.REGULAR);
+    }
+
     @Override
     public String getDisplayString() {
         return " . ";
@@ -9,11 +14,6 @@ public class RegularSquare extends Square {
     @Override
     public int getMultiplier(){
         return 1;
-    }
-
-    @Override
-    public SquareType getSquareType() {
-        return SquareType.REGULAR;
     }
 
 
