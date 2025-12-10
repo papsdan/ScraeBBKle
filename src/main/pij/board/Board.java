@@ -47,6 +47,9 @@ public class Board {
     public String getStartingPosition() {
         return startingPosition;
     }
+    public Square[][] getSquares() {
+        return squares;
+    }
 
     public void setSquare(int row, int column, Square square) {
         this.squares[row][column] = square;
@@ -80,7 +83,7 @@ public class Board {
     static void main(String[] args) {
         Board board = new Board(14,16,"f7");
         System.out.println(board);
-        
+
 
         board.setSquare(2,0,new PremiumWordSquare(10));
         board.setSquare(1,1,new PremiumLetterSquare(24));
