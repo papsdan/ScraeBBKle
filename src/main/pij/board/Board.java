@@ -31,9 +31,9 @@ public class Board {
         this.rows = rows;
         this.startingPosition = startingPosition;
         this.squares = new Square[rows][cols];
-        for (int i=0;i<rows;i++) {
-            for(int j=0;j<cols;j++) {
-                this.squares[i][j] = new RegularSquare();
+        for (int row=0;row<rows;row++) {
+            for(int col=0;col<cols;col++) {
+                this.squares[row][col] = new RegularSquare();
             }
         }
     }
@@ -70,14 +70,39 @@ public class Board {
     }
 
 
-    public void prettyPrint() {
-        for (int i=0;i<this.squares.length;i++) {
+    public void displayBoard() {
+        System.out.print("   ");
+        for (int i=0;i<this.cols;i++) {
+            System.out.print(" "+(char)('a'+i)+" ");
+        }
+        System.out.println();
+        for (int row=0;row<this.squares.length;row++) {
             System.out.println();
-            for (int j=0;j<this.squares[i].length;j++) {
-                System.out.print(getSquare(i,j).getDisplayString());
+
+                if(row<9){
+                    System.out.print(" "+(row+1)+" ");
+                } else {
+                    System.out.print((row+1)+" ");
+                }
+
+            for (int col=0;col<this.squares[row].length;col++) {
+                System.out.print(getSquare(row,col).getDisplayString());
+            }
+            if(row<9){
+                System.out.print("  "+(row+1)+" ");
+            } else {
+                System.out.print(" "+(row+1)+" ");
             }
         }
+        System.out.println();
+        System.out.println();
+        System.out.print("   ");
+        for (int i=0;i<this.cols;i++) {
+            System.out.print(" "+(char)('a'+i)+" ");
+        }
     }
+
+
 
 
     static void main(String[] args) {
@@ -90,9 +115,12 @@ public class Board {
         board.setSquare(5,2,new PremiumWordSquare(13));
         board.setSquare(0,0,new PremiumWordSquare(16));
         board.getSquare(0,0);
-        board.prettyPrint();
+        board.displayBoard();
         System.out.println();
         System.out.println(board.getSquareByPosition("a1").getDisplayString());
+
+
+
 
 }
     }
