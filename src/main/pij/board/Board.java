@@ -1,4 +1,5 @@
 package pij.board;
+import pij.square.RegularSquare;
 import pij.square.Square;
 
 public class Board {
@@ -8,11 +9,11 @@ public class Board {
      Square[][] squares;
 
     public Board(int rows,int cols,  String startingPosition) {
-        if(cols < 7 || cols > 26) {
-            throw new IllegalArgumentException("Columns must be between 7 and 26");
-        }
         if(rows < 10 || rows > 99) {
             throw new IllegalArgumentException("Rows must be between 10 and 99");
+        }
+        if(cols < 7 || cols > 26) {
+            throw new IllegalArgumentException("Columns must be between 7 and 26");
         }
         if(cols*rows < 192) {
             throw new IllegalArgumentException("Board must have at least 192 squares");
@@ -28,6 +29,11 @@ public class Board {
         this.rows = rows;
         this.startingPosition = startingPosition;
         this.squares = new Square[rows][cols];
+        for (int i=0;i<rows;i++) {
+            for(int j=0;j<cols;j++) {
+                this.squares[i][j] = new RegularSquare();
+            }
+        }
     }
 
     public int getRows() {
@@ -40,4 +46,9 @@ public class Board {
         return startingPosition;
     }
 
+
+    static void main(String[] args) {
+        Board board = new Board(20,10,"d7");
+        System.out.println(board);
+    }
 }
