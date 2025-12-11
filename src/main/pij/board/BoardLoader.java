@@ -64,6 +64,6 @@ public class BoardLoader {
 
     public static void main(String[] args) throws IOException {
         Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
-        board.prettyPrint();
+        board.displayBoard();
     }
 }
