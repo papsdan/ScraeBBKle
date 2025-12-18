@@ -51,6 +51,9 @@ public class Board {
     public Square[][] getSquares() {
         return squares;
     }
+    public String getStartingPosition() {
+        return this.startingPosition;
+    }
 
     public void setSquare(int row, int column, Square square) {
         this.squares[row][column] = square;
