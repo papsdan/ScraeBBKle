@@ -1,5 +1,7 @@
 package pij.square;
 
+import pij.tile.Tile;
+
 public class PremiumLetterSquare extends Square {
     private final int multiplier;
 
@@ -11,6 +13,10 @@ public class PremiumLetterSquare extends Square {
 
     @Override
     public String getDisplayString() {
+        if (isSquareOccupied()) {
+            Tile tile = getTile();
+            return String.format("%c%-2d", Character.toUpperCase(tile.getLetter()), tile.getValue());
+        }
         return formatPremiumDisplay(this.multiplier, '.');
 
     }

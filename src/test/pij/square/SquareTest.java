@@ -1,9 +1,9 @@
 package pij.square;
 
 import org.junit.Test;
+import pij.tile.Tile;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.*;
 
 public class SquareTest {
 
@@ -34,7 +34,7 @@ public class SquareTest {
     }
 
     @Test
-    public void testSquareDisplay(){
+    public void testBlankSquareDisplay(){
         PremiumLetterSquare square1 = new PremiumLetterSquare(12);
         assertEquals("12.", square1.getDisplayString());
 
@@ -61,6 +61,20 @@ public class SquareTest {
 
         RegularSquare square9 = new RegularSquare();
         assertEquals(" . ", square9.getDisplayString());
+
+    }
+
+    @Test
+    public void testOccupiedSquareDisplay(){
+        Tile tile = new Tile('a',1);
+
+        PremiumLetterSquare square1 = new PremiumLetterSquare(12);
+        assertEquals("12.", square1.getDisplayString());
+        assertFalse(square1.isSquareOccupied());
+        square1.setTile(tile);
+        assertEquals("A1 ", square1.getDisplayString());
+        assertTrue(square1.isSquareOccupied());
+
 
     }
 
