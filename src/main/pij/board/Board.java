@@ -1,6 +1,8 @@
 package pij.board;
 import pij.square.Square;
 
+import java.io.IOException;
+
 
 public class Board {
     private final int cols;
@@ -49,16 +51,25 @@ public class Board {
         return squares[row][column];
     }
 
-    public Square getSquareByPosition(String position) {
-        char colChar = position.charAt(0);
-        int rowNum = Integer.parseInt(position.substring(1));
-        int colNum = 0;
-        if (colChar >= 'a' && colChar <= 'z') {
-            colNum = (int) colChar - (int) 'a';
-        }
-        return getSquare(rowNum - 1, colNum);
+    public String getSquarePositionCoordinates(String position){
+        int colIndex = getColumnIndex(position);
+        int rowIndex = getRowIndex(position);
+        return (colIndex) + "," + (rowIndex);
     }
 
+    public Square getSquareByPosition(String position) {
+        int colIndex = getColumnIndex(position);
+        int rowIndex = getRowIndex(position);
+        return getSquare(rowIndex, colIndex);
+    }
+
+    public int getColumnIndex(String position){
+        return position.charAt(0) - 'a';
+    }
+
+    public int getRowIndex(String position){
+        return Integer.parseInt(position.substring(1)) - 1;
+    }
 
     public void displayBoard() {
         displayColumnIndex();
