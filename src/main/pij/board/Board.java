@@ -1,17 +1,12 @@
 package pij.board;
-
-import pij.square.PremiumLetterSquare;
-import pij.square.PremiumWordSquare;
-import pij.square.RegularSquare;
 import pij.square.Square;
 
-import java.io.IOException;
 
 public class Board {
-    private int cols;
-    private int rows;
-    private String startingPosition;
-    private Square[][] squares;
+    private final int cols;
+    private final int rows;
+    private final String startingPosition;
+    private final Square[][] squares;
 
     public Board(int cols, int rows, String startingPosition) {
         if (cols < 7 || cols > 26) {
@@ -37,19 +32,10 @@ public class Board {
     }
 
     public int getRows() {
-        return rows;
+        return this.rows;
     }
-
     public int getCols() {
-        return cols;
-    }
-
-    public String getStartingPosition() {
-        return startingPosition;
-    }
-
-    public Square[][] getSquares() {
-        return squares;
+        return this.cols;
     }
     public String getStartingPosition() {
         return this.startingPosition;
@@ -63,9 +49,9 @@ public class Board {
         return squares[row][column];
     }
 
-    public Square getSquareByPosition(String startingPosition) {
-        char colChar = startingPosition.charAt(0);
-        int rowNum = Integer.parseInt(startingPosition.substring(1));
+    public Square getSquareByPosition(String position) {
+        char colChar = position.charAt(0);
+        int rowNum = Integer.parseInt(position.substring(1));
         int colNum = 0;
         if (colChar >= 'a' && colChar <= 'z') {
             colNum = (int) colChar - (int) 'a';
@@ -108,24 +94,5 @@ public class Board {
         }
     }
 
-
-    static void main(String[] args) throws IOException {
-        Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
-        board.displayBoard();
-
-//        System.out.println(board);
-//
-//
-//        board.setSquare(2,0,new PremiumWordSquare(10));
-//        board.setSquare(1,1,new PremiumLetterSquare(24));
-//        board.setSquare(5,2,new PremiumWordSquare(13));
-//        board.setSquare(0,0,new PremiumWordSquare(16));
-//        board.getSquare(0,0);
-//        System.out.println(board.getSquareByPosition("a1").getDisplayString());
-
-        //board.displayColumnIndex();
-
-
-    }
 }
 
