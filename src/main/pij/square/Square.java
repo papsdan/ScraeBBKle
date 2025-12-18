@@ -35,6 +35,9 @@ public abstract class Square {
 
 
     public void setTile(Tile tile) {
+        if(isSquareOccupied()){
+            throw new IllegalStateException("Square already occupied");
+        }
         this.tile = tile;
     }
 
