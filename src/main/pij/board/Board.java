@@ -1,7 +1,8 @@
 package pij.board;
 import pij.square.Square;
 
-import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Board {
@@ -51,12 +52,6 @@ public class Board {
         return squares[row][column];
     }
 
-    public String getSquarePositionCoordinates(String position){
-        int colIndex = getColumnIndex(position);
-        int rowIndex = getRowIndex(position);
-        return (colIndex) + "," + (rowIndex);
-    }
-
     public Square getSquareByPosition(String position) {
         int colIndex = getColumnIndex(position);
         int rowIndex = getRowIndex(position);
@@ -64,11 +59,23 @@ public class Board {
     }
 
     public int getColumnIndex(String position){
-        return position.charAt(0) - 'a';
+        Pattern pattern = Pattern.compile("[a-z]");
+        Matcher matcher = pattern.matcher(position);
+        if (matcher.find()) {
+            return matcher.group().charAt(0) - 'a';
+        }
+        throw new IllegalArgumentException("No column letter found in position: " + position);
+
     }
 
     public int getRowIndex(String position){
-        return Integer.parseInt(position.substring(1)) - 1;
+        Pattern pattern = Pattern.compile("\\d+");
+        Matcher matcher = pattern.matcher(position);
+        if (matcher.find()) {
+            String numberStr = matcher.group();
+            return Integer.parseInt(numberStr)-1;
+        }
+        throw new IllegalArgumentException("No row number found in position: " + position);
     }
 
     public void displayBoard() {
