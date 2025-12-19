@@ -1,0 +1,64 @@
+package pij.board;
+
+import org.junit.Test;
+import pij.tile.Tile;
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+public class MoveTest {
+
+    @Test
+    public void testVerticalMove() throws IOException {
+        Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
+        List<Tile> tiles = List.of(
+                new Tile('D', 2),
+                new Tile('I', 1),
+                new Tile('N', 1),
+                new Tile('E', 2),
+                new Tile('D', 2)
+        );
+
+        Move move = new Move(board, "d4", tiles);
+        move.placeTile();
+
+        assertTrue(board.getSquareByPosition("d4").isSquareOccupied());
+        assertTrue(board.getSquareByPosition("d5").isSquareOccupied());
+        assertTrue(board.getSquareByPosition("d6").isSquareOccupied());
+        assertTrue(board.getSquareByPosition("d7").isSquareOccupied());
+        assertTrue(board.getSquareByPosition("d8").isSquareOccupied());
+
+        assertEquals('D', board.getSquareByPosition("d4").getTile().getLetter());
+        assertEquals('I', board.getSquareByPosition("d5").getTile().getLetter());
+        assertEquals('N', board.getSquareByPosition("d6").getTile().getLetter());
+        assertEquals('E', board.getSquareByPosition("d7").getTile().getLetter());
+        assertEquals('D', board.getSquareByPosition("d8").getTile().getLetter());
+
+    }
+
+    @Test
+    public void testHorizontalMove() throws IOException {
+
+        Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
+        List<Tile> tiles = List.of(
+                new Tile('T', 1),
+                new Tile('E', 2),
+                new Tile('N', 1)
+        );
+
+        Move move = new Move(board, "7c", tiles);
+        move.placeTile();
+
+        assertTrue(board.getSquareByPosition("7c").isSquareOccupied());
+        assertTrue(board.getSquareByPosition("7d").isSquareOccupied());
+        assertTrue(board.getSquareByPosition("7e").isSquareOccupied());
+
+        assertEquals('T', board.getSquareByPosition("7c").getTile().getLetter());
+        assertEquals('E', board.getSquareByPosition("7d").getTile().getLetter());
+        assertEquals('N', board.getSquareByPosition("7e").getTile().getLetter());
+
+    }
+
+
+}
