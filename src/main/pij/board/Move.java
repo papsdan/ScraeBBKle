@@ -11,14 +11,18 @@ public class Move {
     private List<Tile> tiles;
     private String word;
     private boolean isHorizontal;
+    private boolean isPass;
 
-    public Move(Board board, String position, List<Tile> tiles) {
+    public Move(Board board, String position, List<Tile> tiles, boolean isPass) {
         this.board = board;
         this.position = position;
         this.tiles = tiles;
         this.word = "";
-        this.isHorizontal = Character.isDigit(this.position.charAt(0));
+        this.isPass = isPass;
 
+        if (!isPass) {
+            this.isHorizontal = Character.isDigit(this.position.charAt(0));
+        }
     }
 
     //if numbers first, then horizontal
@@ -99,6 +103,11 @@ public class Move {
         return completeWord.toString();
     }
 
+    public boolean getIsPass() {
+        return this.isPass;
+    }
+
+
     static void main(String[] args) throws IOException {
         Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
         List<Tile> tiles = List.of(
@@ -109,7 +118,7 @@ public class Move {
                 new Tile('D', 2)
         );
 
-        Move move = new Move(board, "d4", tiles);
+        Move move = new Move(board, "d4", tiles,false);
         move.placeTile();
         // board.displayBoard();
 
@@ -121,7 +130,7 @@ public class Move {
                 new Tile('N', 1)
         );
 
-        Move move2 = new Move(board, "7c", tiles2);
+        Move move2 = new Move(board, "7c", tiles2,false);
         move2.placeTile();
         //board.displayBoard();
 
@@ -131,7 +140,7 @@ public class Move {
                 new Tile('E', 2)
         );
 
-        Move move3 = new Move(board, "4e", tiles3);
+        Move move3 = new Move(board, "4e", tiles3,false);
         move3.placeTile();
         //board.displayBoard();
 
