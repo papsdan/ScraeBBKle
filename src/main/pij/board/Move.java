@@ -106,7 +106,17 @@ public class Move {
     public boolean getIsPass() {
         return this.isPass;
     }
+    public String getPosition() {
+        return this.position;
+    }
 
+    public List<Tile> getTiles() {
+        return tiles;
+    }
+
+    public boolean isHorizontal() {
+        return isHorizontal;
+    }
 
     static void main(String[] args) throws IOException {
         Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
