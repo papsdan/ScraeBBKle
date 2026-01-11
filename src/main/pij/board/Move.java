@@ -77,11 +77,11 @@ public class Move {
 
         if (isHorizontal) {
             //check if any tiles to left to work out what the starting column index is of word
-            while (board.getSquare(currentRowIndex, wordStartColIndex - 1).isSquareOccupied()) {
+            while (wordStartColIndex > 0 && board.getSquare(currentRowIndex, wordStartColIndex - 1).isSquareOccupied()) {
                 wordStartColIndex--;
             }
 
-            while (board.getSquare(currentRowIndex, wordEndColIndex + 1).isSquareOccupied()) {
+            while (wordEndColIndex < board.getCols()-1 && board.getSquare(currentRowIndex, wordEndColIndex + 1).isSquareOccupied()) {
                 wordEndColIndex++;
             }
             for (int col = wordStartColIndex; col <= wordEndColIndex; col++) {
@@ -89,11 +89,11 @@ public class Move {
             }
         } else {
             //check if any tiles above to work out what the starting row index is of word
-            while (board.getSquare(wordStartRowIndex - 1, currentColIndex).isSquareOccupied()) {
+            while (wordStartRowIndex > 0 && board.getSquare(wordStartRowIndex - 1, currentColIndex).isSquareOccupied()) {
                 wordStartRowIndex--;
             }
 
-            while (board.getSquare(wordEndRowIndex + 1, currentColIndex).isSquareOccupied()) {
+            while (wordEndRowIndex < board.getRows() -1 && board.getSquare(wordEndRowIndex + 1, currentColIndex).isSquareOccupied()) {
                 wordEndRowIndex++;
             }
             for (int row = wordStartRowIndex; row <= wordEndRowIndex; row++) {
