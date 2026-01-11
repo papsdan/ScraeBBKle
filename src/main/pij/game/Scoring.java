@@ -30,47 +30,56 @@ public class Scoring {
 
         int currentColIndex = board.getColumnIndex(move.getPosition());
         int currentRowIndex = board.getRowIndex(move.getPosition());
+
+        int wordStartColIndex = currentColIndex;
+        int wordStartRowIndex = currentRowIndex;
+
         List<Tile> tiles = move.getTiles();
         int i = 0;
         int wordMultiplier = 1;
 
-        while(i < tiles.size()) {
-            if (!board.getSquare(currentRowIndex, currentColIndex).isSquareOccupied()) {
-                System.out.println(tiles.get(i).getLetter() +": square is not occupied");
+        if(move.isHorizontal()){
+            while (board.getSquare(currentRowIndex, wordStartColIndex - 1).isSquareOccupied()) {
+                wordStartColIndex--;
+            }
+        } else {
+            while (board.getSquare(wordStartRowIndex - 1, currentColIndex).isSquareOccupied()) {
+                wordStartRowIndex--;
+            }
+        }
+
+        while(board.getSquare(wordStartRowIndex, wordStartColIndex).isSquareOccupied() || i < tiles.size()) {
+            Square square = board.getSquare(wordStartRowIndex, wordStartColIndex);
+            if (square.isSquareOccupied()) {
+                int tileValue = square.getTile().getValue();
+                score += tileValue;
+            } else {
                 int tileValue = tiles.get(i).getValue();
-                System.out.println("tile value is " + tileValue);
-                Square square = board.getSquare(currentRowIndex, currentColIndex);
                 SquareType squareType = square.getSquareType();
                 if(squareType.equals(SquareType.PREMIUM_WORD)) {
                     score += tileValue;
-                    wordMultiplier *= board.getSquare(currentRowIndex,currentColIndex).getMultiplier();
-                    System.out.println(tiles.get(i).getLetter() + "is on a word multiplier = " + board.getSquare(currentRowIndex,currentColIndex).getMultiplier());
+                    wordMultiplier *= board.getSquare(wordStartRowIndex,wordStartColIndex).getMultiplier();
+                    System.out.println(tiles.get(i).getLetter() + "is on a word multiplier = " + board.getSquare(wordStartRowIndex,wordStartColIndex).getMultiplier());
                 } else if (squareType.equals(SquareType.PREMIUM_LETTER)) {
                     score += premiumLetterScore(square,tileValue);
-                    System.out.println(tiles.get(i).getLetter() + "is on a letter multiplier = " + board.getSquare(currentRowIndex,currentColIndex).getMultiplier());
+                    System.out.println(tiles.get(i).getLetter() + "is on a letter multiplier = " + board.getSquare(wordStartRowIndex,wordStartColIndex).getMultiplier());
                 } else {
                     score += tileValue;
                     System.out.println(tiles.get(i).getLetter() + "is on NOT on a multiplier = " + tileValue);
 
                 }
-
-                if (move.isHorizontal()) {
-                    currentColIndex++;
-                } else {
-                    currentRowIndex++;
-                }
                 i++;
-
-            } else {
-                int tileValue = board.getSquare(currentRowIndex, currentColIndex).getTile().getValue();
-                score += tileValue;
-                if (move.isHorizontal()) {
-                    currentColIndex++;
-                } else {
-                    currentRowIndex++;
-                }
             }
+
+            if (move.isHorizontal()) {
+                wordStartColIndex++;
+            } else {
+                wordStartRowIndex++;
+            }
+
         }
+
+
         System.out.println("Letter score only: " + score);
         System.out.println("Word multiplier: " + wordMultiplier);
         System.out.println("Score = Letter score * wordMultiplier  = " + score);
