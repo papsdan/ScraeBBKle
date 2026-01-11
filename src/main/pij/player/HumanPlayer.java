@@ -40,9 +40,9 @@ public class HumanPlayer extends Player {
                     }
                 }
             }
-            return new Move(board, moveInput[1], placedTiles,false);
+            return new Move(board, moveInput[1], placedTiles);
         } else {
-            return  new Move(board, null, null,true);
+            return new Move();
         }
     }
     }

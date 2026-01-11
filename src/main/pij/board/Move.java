@@ -13,16 +13,16 @@ public class Move {
     private boolean isHorizontal;
     private boolean isPass;
 
-    public Move(Board board, String position, List<Tile> tiles, boolean isPass) {
+    public Move(Board board, String position, List<Tile> tiles) {
         this.board = board;
         this.position = position;
         this.tiles = tiles;
         this.word = "";
-        this.isPass = isPass;
+        this.isHorizontal = Character.isDigit(this.position.charAt(0));
+    }
 
-        if (!isPass) {
-            this.isHorizontal = Character.isDigit(this.position.charAt(0));
-        }
+    public Move() {
+        this.isPass = true;
     }
 
     //if numbers first, then horizontal
@@ -128,7 +128,7 @@ public class Move {
                 new Tile('D', 2)
         );
 
-        Move move = new Move(board, "d4", tiles,false);
+        Move move = new Move(board, "d4", tiles);
         move.placeTile();
         // board.displayBoard();
 
@@ -140,7 +140,7 @@ public class Move {
                 new Tile('N', 1)
         );
 
-        Move move2 = new Move(board, "7c", tiles2,false);
+        Move move2 = new Move(board, "7c", tiles2);
         move2.placeTile();
         //board.displayBoard();
 
@@ -150,7 +150,7 @@ public class Move {
                 new Tile('E', 2)
         );
 
-        Move move3 = new Move(board, "4e", tiles3,false);
+        Move move3 = new Move(board, "4e", tiles3);
         move3.placeTile();
         //board.displayBoard();
 
