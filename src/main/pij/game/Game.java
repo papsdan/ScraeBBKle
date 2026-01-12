@@ -90,6 +90,10 @@ public class Game {
                 || this.numberOfConsectivePasses == 4;
     }
 
+    public boolean isFirstMove() {
+        return this.isFirstMove;
+    }
+
     public void play() {
         while (!isGameOver()) {
 
