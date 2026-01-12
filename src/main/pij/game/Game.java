@@ -22,16 +22,17 @@ public class Game {
     private Player currentPlayerTurn;
     private String gameType;
     private int numberOfConsectivePasses;
+    private boolean isFirstMove;
 
     public Game() throws IOException {
         Scanner sc = new Scanner(System.in);
         System.out.println("Would you like to _l_oad a board or use the _d_efault board?\n" +
                 "Please enter your choice (l/d):");
-        while(this.board == null) {
+        while (this.board == null) {
             char boardType = sc.nextLine().charAt(0);
-            if(boardType == 'd') {
+            if (boardType == 'd') {
                 this.board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
-            } else if(boardType == 'l') {
+            } else if (boardType == 'l') {
                 System.out.println("Please enter the file name of the board:");
                 String fileName = sc.nextLine();
                 this.board = BoardLoader.loadFromFile(fileName);
@@ -41,23 +42,23 @@ public class Game {
         }
         System.out.println("Is Player 1 a _h_uman player or a _c_omputer player?\n" +
                 "Please enter your choice (h/c):");
-        while(this.player1 == null || this.player2 == null) {
+        while (this.player1 == null || this.player2 == null) {
             char playerType = sc.nextLine().charAt(0);
-            if(playerType == 'h') {
+            if (playerType == 'h') {
                 if (this.player1 == null) {
                     this.player1 = new HumanPlayer("Player 1");
                     System.out.println("Is Player 2 a _h_uman player or a _c_omputer player?\n" +
                             "Please enter your choice (h/c):");
                 } else {
-                    this.player2 =  new HumanPlayer("Player 2");
+                    this.player2 = new HumanPlayer("Player 2");
                 }
-            } else if(playerType == 'c') {
+            } else if (playerType == 'c') {
                 if (this.player1 == null) {
                     this.player1 = new ComputerPlayer("Player 1");
                     System.out.println("Is Player 2 a _h_uman player or a _c_omputer player?\n" +
                             "Please enter your choice (h/c):");
                 } else {
-                    this.player2 =  new ComputerPlayer("Player 2");
+                    this.player2 = new ComputerPlayer("Player 2");
                 }
             } else {
                 System.out.println("Invalid choice. Please enter h or c:");
@@ -65,11 +66,11 @@ public class Game {
         }
         System.out.println("Would you like to play an _o_pen or a _c_losed game?\n" +
                 "Please enter your choice (o/c):");
-        while(this.gameType == null) {
+        while (this.gameType == null) {
             char open_or_closed = sc.nextLine().charAt(0);
-            if(open_or_closed == 'o') {
+            if (open_or_closed == 'o') {
                 this.gameType = "open";
-            } else if(open_or_closed == 'c') {
+            } else if (open_or_closed == 'c') {
                 this.gameType = "closed";
             } else {
                 System.out.println("Invalid choice. Please enter o or c:");
@@ -81,6 +82,62 @@ public class Game {
         this.numberOfConsectivePasses = 0;
         this.player1.getTileRack().fillRack(this.tileBag);
         this.player2.getTileRack().fillRack(this.tileBag);
+        this.isFirstMove = true;
     }
 
+    public boolean isGameOver() {
+        return (this.tileBag.getRemainingTileCount() == 0 && (this.player1.getTileRack().getRackCount() == 0 || this.player2.getTileRack().getRackCount() == 0))
+                || this.numberOfConsectivePasses == 4;
+    }
+
+    public void play() {
+        while (!isGameOver()) {
+
+            board.displayBoard();
+            System.out.println();
+            System.out.println("Start position: " + board.getStartingPosition());
+            Player opponentPlayer;
+            if (this.currentPlayerTurn == this.player1) {
+                opponentPlayer = this.player2;
+            } else {
+                opponentPlayer = this.player1;
+            }
+            if(this.gameType.equals("open")) {
+                System.out.println("OPEN GAME: " + opponentPlayer.getPlayerName() + " 's tiles:");
+                System.out.println("OPEN GAME: " + opponentPlayer.getTileRack().getTiles());
+            }
+            System.out.println("It's your turn, " + this.currentPlayerTurn.getPlayerName() + "! Your tiles:");
+            System.out.println(this.currentPlayerTurn.getTileRack().getTiles());
+            Move input = currentPlayerTurn.makeMove(this.board);
+
+            Scoring score = new Scoring();
+            this.currentPlayerTurn.addScore(score.totalScore(input,this.board));
+            System.out.println("Player 1 score: " + this.player1.getScore());
+            System.out.println("Player 2 score: " + this.player2.getScore());
+
+            if (input.getIsPass()) {
+                this.numberOfConsectivePasses += 1;
+            } else {
+                input.placeTile();
+                if(isFirstMove) {
+                    isFirstMove = false;
+                }
+                currentPlayerTurn.getTileRack().fillRack(this.tileBag);
+                this.numberOfConsectivePasses = 0;
+            }
+            this.currentPlayerTurn = opponentPlayer;
+
+            System.out.println("Number of consecutive passes: " + this.numberOfConsectivePasses);
+            System.out.println(this.gameType);
+
+        }
+
+    }
+    public static void main(String[] args) throws IOException {
+        Game game = new Game();
+
+
+        game.play();
+
+    }
 }
