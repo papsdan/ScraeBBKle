@@ -11,6 +11,7 @@ import pij.tile.Tile;
 import pij.tile.TileBag;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Game {
@@ -135,6 +136,30 @@ public class Game {
             System.out.println(this.gameType);
 
         }
+
+        List<Tile> player1Tiles = player1.getTileRack().getTiles();
+        List<Tile> player2Tiles = player2.getTileRack().getTiles();
+
+        for(Tile tile : player1Tiles) {
+            int value = tile.getValue();
+            player1.addScore(-value);
+        }
+        for(Tile tile : player2Tiles) {
+            int value = tile.getValue();
+            player2.addScore(-value);
+        }
+
+        System.out.println("Game Over!");
+        System.out.println(this.player1.getPlayerName() + " scored " + this.player1.getScore() + " points.");
+        System.out.println(this.player2.getPlayerName() + " scored " + this.player2.getScore() + " points.");
+        if(this.player1.getScore() > this.player2.getScore()) {
+            System.out.println(this.player1.getPlayerName() + " wins!");
+        } else if(this.player2.getScore() > this.player1.getScore()) {
+            System.out.println(this.player2.getPlayerName() + " wins!");
+        } else {
+            System.out.println("It's a draw!");
+        }
+
 
     }
     public static void main(String[] args) throws IOException {
