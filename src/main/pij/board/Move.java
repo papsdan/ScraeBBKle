@@ -1,5 +1,6 @@
 package pij.board;
 
+import pij.square.Square;
 import pij.tile.Tile;
 
 import java.io.IOException;
@@ -36,10 +37,10 @@ public class Move {
         int currentRowIndex = board.getRowIndex(position);
         int tilesPlaced = 0;
 
-
         while (tilesPlaced < this.tiles.size()) {
-            if (!board.getSquare(currentRowIndex, currentColIndex).isSquareOccupied()) {
-                board.getSquare(currentRowIndex, currentColIndex).setTile(tiles.get(tilesPlaced));
+            Square square = board.getSquare(currentRowIndex, currentColIndex);
+            if (!square.isSquareOccupied()) {
+                square.setTile(tiles.get(tilesPlaced));
                 this.word = this.word + tiles.get(tilesPlaced).getLetter();
                 if (this.isHorizontal) {
                     currentColIndex++;
@@ -50,7 +51,7 @@ public class Move {
                 tilesPlaced++;
 
             } else {
-                this.word = this.word + board.getSquare(currentRowIndex, currentColIndex).getTile().getLetter();
+                this.word = this.word + square.getTile().getLetter();
 
                 if (this.isHorizontal) {
                     currentColIndex++;
@@ -62,7 +63,7 @@ public class Move {
         System.out.println(word);
     }
 
-    public String formWord() {
+    public String previewWord() {
 
         int currentColIndex = board.getColumnIndex(position);
         int currentRowIndex = board.getRowIndex(position);
@@ -70,37 +71,40 @@ public class Move {
         int wordStartColIndex = currentColIndex;
         int wordStartRowIndex = currentRowIndex;
 
-        int wordEndColIndex = currentColIndex;
-        int wordEndRowIndex = currentRowIndex;
+        StringBuilder completePreviewWord = new StringBuilder();
 
-        StringBuilder completeWord = new StringBuilder();
-
+        //FINDING THE START INDEX TO WORK OUT WHAT THE START OF THE WORD IS
         if (isHorizontal) {
             //check if any tiles to left to work out what the starting column index is of word
             while (wordStartColIndex > 0 && board.getSquare(currentRowIndex, wordStartColIndex - 1).isSquareOccupied()) {
                 wordStartColIndex--;
-            }
-
-            while (wordEndColIndex < board.getCols()-1 && board.getSquare(currentRowIndex, wordEndColIndex + 1).isSquareOccupied()) {
-                wordEndColIndex++;
-            }
-            for (int col = wordStartColIndex; col <= wordEndColIndex; col++) {
-                completeWord.append(board.getSquare(currentRowIndex, col).getTile().getLetter());
             }
         } else {
             //check if any tiles above to work out what the starting row index is of word
             while (wordStartRowIndex > 0 && board.getSquare(wordStartRowIndex - 1, currentColIndex).isSquareOccupied()) {
                 wordStartRowIndex--;
             }
+        }
 
-            while (wordEndRowIndex < board.getRows() -1 && board.getSquare(wordEndRowIndex + 1, currentColIndex).isSquareOccupied()) {
-                wordEndRowIndex++;
+        int tilesToBePlaced = 0;
+
+        while (tilesToBePlaced < this.tiles.size()) {
+            Square square = board.getSquare(wordStartRowIndex, wordStartColIndex);
+            if(square.isSquareOccupied()) {
+                //System.out.println("index " + wordStartRowIndex + ", " + wordStartColIndex + " is occupied by "  + square.getTile().getLetter());
+                completePreviewWord.append(square.getTile().getLetter());
+            } else {
+                completePreviewWord.append(tiles.get(tilesToBePlaced).getLetter());
+                tilesToBePlaced++;
             }
-            for (int row = wordStartRowIndex; row <= wordEndRowIndex; row++) {
-                completeWord.append(board.getSquare(row, currentColIndex).getTile().getLetter());
+            if(isHorizontal){
+                wordStartColIndex++;
+            } else {
+                wordStartRowIndex++;
             }
         }
-        return completeWord.toString();
+
+        return completePreviewWord.toString();
     }
 
     public boolean getIsPass() {
@@ -120,29 +124,29 @@ public class Move {
 
     static void main(String[] args) throws IOException {
         Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
-        List<Tile> tiles = List.of(
-                new Tile('D', 2),
-                new Tile('I', 1),
-                new Tile('N', 1),
-                new Tile('E', 2),
-                new Tile('D', 2)
-        );
-
-        Move move = new Move(board, "d4", tiles);
-        move.placeTile();
-        // board.displayBoard();
-
-        List<Tile> tiles2 = List.of(
-                new Tile('T', 1),
-                new Tile('N', 1),
-                new Tile('Z', 9),
-                new Tile('O', 1),
-                new Tile('N', 1)
-        );
-
-        Move move2 = new Move(board, "7c", tiles2);
-        move2.placeTile();
-        //board.displayBoard();
+//        List<Tile> tiles = List.of(
+//                new Tile('D', 2),
+//                new Tile('I', 1),
+//                new Tile('N', 1),
+//                new Tile('E', 2),
+//                new Tile('D', 2)
+//        );
+//
+//        Move move = new Move(board, "d4", tiles);
+//        //move.placeTile();
+//        // board.displayBoard();
+//
+//        List<Tile> tiles2 = List.of(
+//                new Tile('T', 1),
+//                new Tile('N', 1),
+//                new Tile('Z', 9),
+//                new Tile('O', 1),
+//                new Tile('N', 1)
+//        );
+//
+//        Move move2 = new Move(board, "7c", tiles2);
+//        //move2.placeTile();
+//        //board.displayBoard();
 
         List<Tile> tiles3 = List.of(
                 new Tile('O', 1),
@@ -150,19 +154,18 @@ public class Move {
                 new Tile('E', 2)
         );
 
-        Move move3 = new Move(board, "4e", tiles3);
-        move3.placeTile();
+        Move move3 = new Move(board, "3c", tiles3);
+        //move3.placeTile();
         //board.displayBoard();
 
         board.getSquareByPosition("d3").setTile(new Tile('X', 1));
-        board.getSquareByPosition("c4").setTile(new Tile('C', 1));
-        board.getSquareByPosition("b4").setTile(new Tile('B', 1));
+//        board.getSquareByPosition("c4").setTile(new Tile('C', 1));
+//        board.getSquareByPosition("b4").setTile(new Tile('B', 1));
 
         board.displayBoard();
 
-        System.out.println(move3.formWord());
-        System.out.println(move.formWord());
-        System.out.println(move2.formWord());
+        System.out.println(move3.previewWord());
+
 
 
     }
