@@ -1,9 +1,11 @@
 package pij.player;
 
 import pij.board.Board;
+import pij.board.BoardLoader;
 import pij.board.Move;
 import pij.tile.Tile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -44,12 +46,25 @@ public class HumanPlayer extends Player {
             List<Tile> placedTiles = new ArrayList<>();
 
             for (int i = 0; i < moveInput[0].length(); i++) {
-                for (int j = 0; j < getTileRack().getRackCount(); j++) {
-                    if (moveInput[0].charAt(i) == tiles.get(j).getLetter()) {
-                        placedTiles.add(tiles.get(j));
-                        tiles.remove(tiles.get(j));
-                        break;
+                char letter =  moveInput[0].charAt(i);
+
+                if(Character.isLowerCase(letter)) {
+                    for (int j = 0; j < getTileRack().getRackCount(); j++) {
+                        if (tiles.get(j).isWildcard()){
+                            tiles.get(j).setWildcardLetter(letter);
+                            placedTiles.add(tiles.get(j));
+                            tiles.remove(tiles.get(j));
+                            break;
+                        }
                     }
+                } else {
+                    for (int j = 0; j < getTileRack().getRackCount(); j++) {
+                        if (tiles.get(j).getLetter() == letter) {
+                            placedTiles.add(tiles.get(j));
+                            tiles.remove(tiles.get(j));
+                            break;
+                        }
+                }
                 }
             }
             return new Move(board, moveInput[1], placedTiles);
@@ -81,13 +96,5 @@ public class HumanPlayer extends Player {
 
         return true;
     }
-
-    static void main() {
-        HumanPlayer humanPlayer = new HumanPlayer("HumanPlayer");
-        System.out.println(humanPlayer.isValidMoveFormat("d5,hello"));
-        System.out.println(humanPlayer.isValidMoveFormat("d5,HELLO"));
-        System.out.println(humanPlayer.isValidMoveFormat("HELLO,D5"));
-        System.out.println(humanPlayer.isValidMoveFormat("HELLOo,d5"));
-
-    }
+    
     }
