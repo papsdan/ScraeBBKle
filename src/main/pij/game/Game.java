@@ -114,14 +114,12 @@ public class Game {
             System.out.println(this.currentPlayerTurn.getTileRack().getTiles());
             Move input = currentPlayerTurn.makeMove(this.board);
 
-            Scoring score = new Scoring();
-            this.currentPlayerTurn.addScore(score.totalScore(input,this.board));
-            System.out.println("Player 1 score: " + this.player1.getScore());
-            System.out.println("Player 2 score: " + this.player2.getScore());
 
             if (input.getIsPass()) {
                 this.numberOfConsectivePasses += 1;
             } else {
+                Scoring score = new Scoring();
+                this.currentPlayerTurn.addScore(score.totalScore(input,this.board));
                 input.placeTile();
                 if(isFirstMove) {
                     isFirstMove = false;
@@ -129,6 +127,8 @@ public class Game {
                 currentPlayerTurn.getTileRack().fillRack(this.tileBag);
                 this.numberOfConsectivePasses = 0;
             }
+            System.out.println("Player 1 score: " + this.player1.getScore());
+            System.out.println("Player 2 score: " + this.player2.getScore());
             this.currentPlayerTurn = opponentPlayer;
 
             System.out.println("Number of consecutive passes: " + this.numberOfConsectivePasses);
