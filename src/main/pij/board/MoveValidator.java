@@ -51,6 +51,11 @@ public class MoveValidator {
             return false;
         }
 
+        if (!isFirstMove && !connectToExistingTiles(board, move)) {
+            System.out.println("Move must connect to another existing tile.");
+            return false;
+        }
+
         return true;
     }
 
@@ -128,50 +133,127 @@ public class MoveValidator {
         int tilesToPlace = move.getTiles().size();
         int tilesPlacedCounter = 0;
 
-        while (tilesPlacedCounter < tilesToPlace) {
-            if (isSquareOccupied(board, moveRowIndex, moveColIndex)) {
-                System.out.println("YES");
+        // Check if tile directly before the move position. Horizontal (left) and Vertical (above)
+        if (move.isHorizontal()) {
+            if (isSquareOccupied(board, moveRowIndex, moveColIndex - 1)) {
                 return true;
-            } else {
-                if (isSquareOccupied(board, moveRowIndex - 1, moveColIndex)
-                        || isSquareOccupied(board, moveRowIndex + 1, moveColIndex)
-                        || isSquareOccupied(board, moveRowIndex, moveColIndex - 1)
-                        || isSquareOccupied(board, moveRowIndex, moveColIndex + 1)) {
-                    return true;
-                }
-                tilesPlacedCounter++;
             }
-
-            if (move.isHorizontal()) {
-                moveColIndex++;
-            } else {
-                moveRowIndex++;
+        } else {
+            if (isSquareOccupied(board, moveRowIndex - 1, moveColIndex)) {
+                return true;
             }
         }
-        return false;
+
+        while (tilesPlacedCounter < tilesToPlace) {
+            if (move.isHorizontal() && (isSquareOccupied(board, moveRowIndex - 1, moveColIndex)
+                    || isSquareOccupied(board, moveRowIndex + 1, moveColIndex))) {
+                return true;
+            } else if (!move.isHorizontal() && (isSquareOccupied(board, moveRowIndex, moveColIndex - 1)
+                    || isSquareOccupied(board, moveRowIndex, moveColIndex + 1))) {
+                return true;
+            }
+            tilesPlacedCounter++;
+
+        if (move.isHorizontal()) {
+            moveColIndex++;
+        } else {
+            moveRowIndex++;
+        }
+    }
+        // Check if tile directly after the move position. Horizontal (right) and Vertical (below)
+
+            return isSquareOccupied(board, moveRowIndex, moveColIndex);
+
     }
 
-    static void main(String[] args) throws IOException {
-        Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
-        List<Tile> tiles = List.of(
-                new Tile('D', 2),
-                new Tile('I', 1),
-                new Tile('N', 1),
-                new Tile('E', 2),
-                new Tile('D', 2)
-        );
+static void main(String[] args) throws IOException {
+    Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
+    List<Tile> tiles = List.of(
+            new Tile('D', 2),
+            new Tile('I', 1),
+            new Tile('N', 1),
+            new Tile('E', 2),
+            new Tile('D', 2)
+    );
 
-        Move move = new Move(board, "d4", tiles);
-        move.placeTile();
-        MoveValidator moveValidator = new MoveValidator();
-        board.displayBoard();
-        System.out.println(moveValidator.connectToExistingTiles(board, move));
+    Move move = new Move(board, "d4", tiles);
+    move.placeTile();
+    MoveValidator moveValidator = new MoveValidator();
+    board.displayBoard();
+    System.out.println(moveValidator.connectToExistingTiles(board, move));
 
-        Move move2 = new Move(board, "h4", tiles);
-        move2.placeTile();
-        board.displayBoard();
-        System.out.println(moveValidator.connectToExistingTiles(board, move2));
-    }
+    List<Tile> tiles2 = List.of(
+            new Tile('T', 2),
+            new Tile('N', 1),
+            new Tile('Z', 1),
+            new Tile('O', 2),
+            new Tile('N', 2)
+    );
+
+    Move move2 = new Move(board, "7c", tiles2);
+    move2.placeTile();
+    board.displayBoard();
+    System.out.println(moveValidator.connectToExistingTiles(board, move2));
+
+    List<Tile> tiles3 = List.of(
+            new Tile('O', 2)
+    );
+
+    Move move3 = new Move(board, "e6", tiles3);
+    move3.placeTile();
+    board.displayBoard();
+    System.out.println(moveValidator.connectToExistingTiles(board, move3));
+
+
+    List<Tile> tiles4 = List.of(
+            new Tile('O', 2),
+            new Tile('R', 1)
+    );
+
+    Move move4 = new Move(board, "8h", tiles4);
+    move4.placeTile();
+    board.displayBoard();
+    System.out.println(moveValidator.connectToExistingTiles(board, move4));
+
+    List<Tile> tiles5 = List.of(
+            new Tile('O', 2),
+            new Tile('V', 1),
+            new Tile('E', 1)
+
+    );
+
+    Move move5 = new Move(board, "4e", tiles);
+    move5.placeTile();
+    board.displayBoard();
+    System.out.println(moveValidator.connectToExistingTiles(board, move5));
+
+
+
+
+
+//    Move move = new Move(board, "4d", tiles);
+//    move.placeTile();
+//    MoveValidator moveValidator = new MoveValidator();
+//    board.displayBoard();
+//    System.out.println(moveValidator.connectToExistingTiles(board, move));
+//
+//    Move move2 = new Move(board, "8d", tiles);
+//    move2.placeTile();
+//    board.displayBoard();
+//    System.out.println(moveValidator.connectToExistingTiles(board, move2));
+//
+//    List<Tile> tiles2 = List.of(
+//            new Tile('D', 2),
+//            new Tile('I', 1),
+//            new Tile('I', 1)
+//
+//
+//    );
+//    Move move3 = new Move(board, "e5", tiles2);
+//    move3.placeTile();
+//    board.displayBoard();
+//    System.out.println(moveValidator.connectToExistingTiles(board, move3));
+}
 
 }
 
