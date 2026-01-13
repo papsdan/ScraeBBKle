@@ -63,18 +63,18 @@ public class MoveValidator {
         int currentColIndex = board.getColumnIndex(move.getPosition());
         int currentRowIndex = board.getRowIndex(move.getPosition());
 
-        if(currentColIndex < 0 || currentColIndex >= board.getCols() || currentRowIndex < 0 || currentRowIndex >= board.getRows()) {
+        if (currentColIndex < 0 || currentColIndex >= board.getCols() || currentRowIndex < 0 || currentRowIndex >= board.getRows()) {
             return false;
         }
 
         int tilesToBePlaced = move.getTiles().size();
 
-        while(tilesToBePlaced > 0) {
-            if(currentColIndex >= board.getCols() || currentRowIndex >= board.getRows()) {
+        while (tilesToBePlaced > 0) {
+            if (currentColIndex >= board.getCols() || currentRowIndex >= board.getRows()) {
                 return false;
             }
 
-            if(!board.getSquare(currentRowIndex, currentColIndex ).isSquareOccupied()){
+            if (!isSquareOccupied(board, currentRowIndex, currentColIndex)) {
                 tilesToBePlaced--;
             }
 
@@ -86,12 +86,20 @@ public class MoveValidator {
             }
         }
 
-    return true;
+        return true;
+    }
+
+    public boolean isSquareOccupied(Board board, int row, int col) {
+        if (row < 0 || row >= board.getRows() || col < 0 || col >= board.getCols()) {
+            return false;
+        }
+        return board.getSquare(row, col).isSquareOccupied();
     }
 
     public boolean atLeastTwoTilesPlayed(Move move) {
         return move.getTiles().size() >= 2;
     }
+
     public boolean usesStartingSquare(Board board, Move move) {
         int moveColIndex = board.getColumnIndex(move.getPosition());
         int moveRowIndex = board.getRowIndex(move.getPosition());
@@ -114,6 +122,35 @@ public class MoveValidator {
         return false;
     }
 
+    public boolean connectToExistingTiles(Board board, Move move) {
+        int moveColIndex = board.getColumnIndex(move.getPosition());
+        int moveRowIndex = board.getRowIndex(move.getPosition());
+        int tilesToPlace = move.getTiles().size();
+        int tilesPlacedCounter = 0;
+
+        while (tilesPlacedCounter < tilesToPlace) {
+            if (isSquareOccupied(board, moveRowIndex, moveColIndex)) {
+                System.out.println("YES");
+                return true;
+            } else {
+                if (isSquareOccupied(board, moveRowIndex - 1, moveColIndex)
+                        || isSquareOccupied(board, moveRowIndex + 1, moveColIndex)
+                        || isSquareOccupied(board, moveRowIndex, moveColIndex - 1)
+                        || isSquareOccupied(board, moveRowIndex, moveColIndex + 1)) {
+                    return true;
+                }
+                tilesPlacedCounter++;
+            }
+
+            if (move.isHorizontal()) {
+                moveColIndex++;
+            } else {
+                moveRowIndex++;
+            }
+        }
+        return false;
+    }
+
     static void main(String[] args) throws IOException {
         Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
         List<Tile> tiles = List.of(
@@ -125,8 +162,15 @@ public class MoveValidator {
         );
 
         Move move = new Move(board, "d4", tiles);
+        move.placeTile();
         MoveValidator moveValidator = new MoveValidator();
-        System.out.println(moveValidator.usesStartingSquare(board, move));
+        board.displayBoard();
+        System.out.println(moveValidator.connectToExistingTiles(board, move));
+
+        Move move2 = new Move(board, "h4", tiles);
+        move2.placeTile();
+        board.displayBoard();
+        System.out.println(moveValidator.connectToExistingTiles(board, move2));
     }
 
 }

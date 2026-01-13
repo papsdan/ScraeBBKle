@@ -42,18 +42,20 @@ public class HumanPlayer extends Player {
         if (!input.equals(",")) {
 
             String[] moveInput = input.split(",");
-            List<Tile> tiles = this.getTileRack().getTiles();
+            String word = moveInput[0];
+            String position = moveInput[1];
+
+            List<Tile> tiles = new ArrayList<>(this.getTileRack().getTiles());
             List<Tile> placedTiles = new ArrayList<>();
 
-            for (int i = 0; i < moveInput[0].length(); i++) {
-                char letter =  moveInput[0].charAt(i);
+            for (int i = 0; i < word.length(); i++) {
+                char letter =  word.charAt(i);
 
                 if(Character.isLowerCase(letter)) {
                     for (int j = 0; j < getTileRack().getRackCount(); j++) {
                         if (tiles.get(j).isWildcard()){
                             tiles.get(j).setWildcardLetter(letter);
                             placedTiles.add(tiles.get(j));
-                            tiles.remove(tiles.get(j));
                             break;
                         }
                     }
@@ -61,13 +63,12 @@ public class HumanPlayer extends Player {
                     for (int j = 0; j < getTileRack().getRackCount(); j++) {
                         if (tiles.get(j).getLetter() == letter) {
                             placedTiles.add(tiles.get(j));
-                            tiles.remove(tiles.get(j));
                             break;
                         }
                 }
                 }
             }
-            return new Move(board, moveInput[1], placedTiles);
+            return new Move(board, position, placedTiles);
         } else {
             return new Move();
         }

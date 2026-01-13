@@ -113,7 +113,12 @@ public class Game {
             }
             System.out.println("It's your turn, " + this.currentPlayerTurn.getPlayerName() + "! Your tiles:");
             System.out.println(this.currentPlayerTurn.getTileRack().getTiles());
-            Move input = currentPlayerTurn.makeMove(this.board);
+
+            Move input = this.currentPlayerTurn.makeMove(this.board);
+
+            while(!input.getIsPass() && !moveValidator.validateMove(input, this.board, this.isFirstMove)) {
+                input = this.currentPlayerTurn.makeMove(this.board);
+            }
 
 
             if (input.getIsPass()) {
