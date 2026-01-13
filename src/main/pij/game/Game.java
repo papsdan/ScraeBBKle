@@ -127,6 +127,7 @@ public class Game {
                 Scoring score = new Scoring();
                 this.currentPlayerTurn.addScore(score.totalScore(input,this.board));
                 input.placeTile();
+                currentPlayerTurn.getTileRack().removeTiles(input.getTiles());
                 if(isFirstMove) {
                     isFirstMove = false;
                 }
