@@ -4,11 +4,14 @@ import pij.game.Game;
 import pij.player.HumanPlayer;
 import pij.player.Player;
 import pij.tile.Tile;
+import pij.tile.TileBag;
 import pij.tile.TileRack;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -24,12 +27,15 @@ public class MoveValidator {
         }
     }
 
-    public boolean validateMove(Move move, Board board, boolean isFirstMove) {
+    public boolean validateMove(Move move, Board board, boolean isFirstMove, Player currentPlayer) {
 
         if (move.getIsPass()) {
             return true;
         }
-
+        if(!tilesPlayedInRack(move,currentPlayer)) {
+            System.out.println("Move must only include tile from the rack");
+            return false;
+        }
         if (!isWithinBoard(move, board)) {
             System.out.println("The move goes starts or will go off the board");
             return false;
@@ -154,82 +160,132 @@ public class MoveValidator {
             }
             tilesPlacedCounter++;
 
-        if (move.isHorizontal()) {
-            moveColIndex++;
-        } else {
-            moveRowIndex++;
+            if (move.isHorizontal()) {
+                moveColIndex++;
+            } else {
+                moveRowIndex++;
+            }
         }
-    }
         // Check if tile directly after the move position. Horizontal (right) and Vertical (below)
 
-            return isSquareOccupied(board, moveRowIndex, moveColIndex);
+        return isSquareOccupied(board, moveRowIndex, moveColIndex);
 
     }
 
-static void main(String[] args) throws IOException {
-    Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
-    List<Tile> tiles = List.of(
-            new Tile('D', 2),
-            new Tile('I', 1),
-            new Tile('N', 1),
-            new Tile('E', 2),
-            new Tile('D', 2)
-    );
+    public boolean tilesPlayedInRack(Move move, Player player) {
 
-    Move move = new Move(board, "d4", tiles);
-    move.placeTile();
-    MoveValidator moveValidator = new MoveValidator();
-    board.displayBoard();
-    System.out.println(moveValidator.connectToExistingTiles(board, move));
+        List<Tile> tileRackCopy = new ArrayList<>(player.getTileRack().getTiles());
+        List<Tile> moveTiles = move.getTiles();
 
-    List<Tile> tiles2 = List.of(
-            new Tile('T', 2),
-            new Tile('N', 1),
-            new Tile('Z', 1),
-            new Tile('O', 2),
-            new Tile('N', 2)
-    );
+        for (int i = 0; i < moveTiles.size(); i++) {
+            char mTile = moveTiles.get(i).getLetter();
+            boolean isLetterFound = false;
+            for (int j = 0; j < tileRackCopy.size(); j++) {
+                char trTiles = tileRackCopy.get(j).getLetter();
+                if (mTile == trTiles) {
+                    tileRackCopy.remove(tileRackCopy.get(j));
+                    isLetterFound = true;
+                }
+            }
+            if (!isLetterFound) {
+                return false;
+            }
+        }
+        return true;
 
-    Move move2 = new Move(board, "7c", tiles2);
-    move2.placeTile();
-    board.displayBoard();
-    System.out.println(moveValidator.connectToExistingTiles(board, move2));
+        }
+//        for (int i = 0; i < moveTiles.size(); i++) {
+//            char moveLetter = moveTiles.get(i).getLetter();
+//            boolean foundInRack = false;
+//            for (int j = 0; j < rackCopy.size(); j++) {
+//                char rackLetter = rackCopy.get(j).getLetter();
+//                if (rackLetter == moveLetter) {
+//                    rackCopy.remove(j);
+//                    foundInRack = true;
+//                    break;
+//                }
+//            }
+//            if (!foundInRack) {
+//                System.out.println();
+//                return false;
+//            }
+//
+//        }
+//
+//        return true;
+//    }
 
-    List<Tile> tiles3 = List.of(
-            new Tile('O', 2)
-    );
+    static void main(String[] args) throws IOException {
+        Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
+        List<Tile> tiles = List.of(
+                new Tile('D', 2),
+                new Tile('I', 1),
+                new Tile('N', 1),
+                new Tile('E', 2),
+                new Tile('D', 2)
+        );
 
-    Move move3 = new Move(board, "e6", tiles3);
-    move3.placeTile();
-    board.displayBoard();
-    System.out.println(moveValidator.connectToExistingTiles(board, move3));
+        Move move = new Move(board, "d4", tiles);
+        move.placeTile();
+        MoveValidator moveValidator = new MoveValidator();
+        board.displayBoard();
+        System.out.println(moveValidator.connectToExistingTiles(board, move));
+
+        List<Tile> tiles2 = List.of(
+                new Tile('T', 2),
+                new Tile('N', 1),
+                new Tile('Z', 1),
+                new Tile('O', 2),
+                new Tile('N', 2)
+        );
+
+        Move move2 = new Move(board, "7c", tiles2);
+        move2.placeTile();
+        board.displayBoard();
+        System.out.println(moveValidator.connectToExistingTiles(board, move2));
+
+        List<Tile> tiles3 = List.of(
+                new Tile('O', 2)
+        );
+
+        Move move3 = new Move(board, "e6", tiles3);
+        move3.placeTile();
+        board.displayBoard();
+        System.out.println(moveValidator.connectToExistingTiles(board, move3));
 
 
-    List<Tile> tiles4 = List.of(
-            new Tile('O', 2),
-            new Tile('R', 1)
-    );
+        List<Tile> tiles4 = List.of(
+                new Tile('O', 2),
+                new Tile('R', 1)
+        );
 
-    Move move4 = new Move(board, "8h", tiles4);
-    move4.placeTile();
-    board.displayBoard();
-    System.out.println(moveValidator.connectToExistingTiles(board, move4));
+        Move move4 = new Move(board, "8h", tiles4);
+        move4.placeTile();
+        board.displayBoard();
+        System.out.println(moveValidator.connectToExistingTiles(board, move4));
 
-    List<Tile> tiles5 = List.of(
-            new Tile('O', 2),
-            new Tile('V', 1),
-            new Tile('E', 1)
+        List<Tile> tiles5 = List.of(
+                new Tile('O', 2),
+                new Tile('V', 1),
+                new Tile('E', 1)
 
-    );
+        );
 
-    Move move5 = new Move(board, "4e", tiles);
-    move5.placeTile();
-    board.displayBoard();
-    System.out.println(moveValidator.connectToExistingTiles(board, move5));
+        Move move5 = new Move(board, "4e", tiles);
+        move5.placeTile();
+        board.displayBoard();
+        System.out.println(moveValidator.connectToExistingTiles(board, move5));
 
-
-
-
+        Player p = new HumanPlayer("Dan");
+        TileBag tb = new TileBag();
+        List<Tile> tiles6 = List.of(
+                new Tile('Z', 2)
+        );
+        Move move6 = new Move(board, "d4", tiles6);
+        p.getTileRack().fillRack(tb);
+        System.out.println(p.getTileRack().getTiles());
+        System.out.println(move6.getTiles());
+        System.out.println(moveValidator.tilesPlayedInRack(move6, p));
 
 //    Move move = new Move(board, "4d", tiles);
 //    move.placeTile();
@@ -253,7 +309,7 @@ static void main(String[] args) throws IOException {
 //    move3.placeTile();
 //    board.displayBoard();
 //    System.out.println(moveValidator.connectToExistingTiles(board, move3));
-}
+    }
 
 }
 
