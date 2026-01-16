@@ -185,6 +185,7 @@ public class MoveValidator {
                 if (mTile == trTiles) {
                     tileRackCopy.remove(tileRackCopy.get(j));
                     isLetterFound = true;
+                    break;
                 }
             }
             if (!isLetterFound) {
@@ -194,26 +195,6 @@ public class MoveValidator {
         return true;
 
         }
-//        for (int i = 0; i < moveTiles.size(); i++) {
-//            char moveLetter = moveTiles.get(i).getLetter();
-//            boolean foundInRack = false;
-//            for (int j = 0; j < rackCopy.size(); j++) {
-//                char rackLetter = rackCopy.get(j).getLetter();
-//                if (rackLetter == moveLetter) {
-//                    rackCopy.remove(j);
-//                    foundInRack = true;
-//                    break;
-//                }
-//            }
-//            if (!foundInRack) {
-//                System.out.println();
-//                return false;
-//            }
-//
-//        }
-//
-//        return true;
-//    }
 
     static void main(String[] args) throws IOException {
         Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
