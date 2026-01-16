@@ -111,6 +111,30 @@ public class Board {
             System.out.print((row + 1) + " ");
         }
     }
+    public boolean isSquareOccupiedAbove(int row, int col) {
+        return isSquareOccupied(row - 1, col);
+    }
+
+    public boolean isSquareOccupiedBelow(int row, int col) {
+        return isSquareOccupied(row + 1, col);
+    }
+
+
+    public boolean isSquareOccupiedLeft(int row, int col) {
+        return isSquareOccupied(row, col - 1);
+
+    }
+
+    public boolean isSquareOccupiedRight(int row, int col) {
+        return isSquareOccupied(row, col + 1);
+    }
+
+    public boolean isSquareOccupied(int row, int col) {
+        if (row < 0 || row >= this.getRows() || col < 0 || col >= this.getCols()) {
+            return false;
+        }
+        return this.getSquare(row, col).isSquareOccupied();
+    }
 
 }
 

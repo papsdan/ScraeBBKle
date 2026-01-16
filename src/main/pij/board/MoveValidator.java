@@ -90,7 +90,7 @@ public class MoveValidator {
                 return false;
             }
 
-            if (!isSquareOccupied(board, currentRowIndex, currentColIndex)) {
+            if (!board.isSquareOccupied(currentRowIndex, currentColIndex)) {
                 tilesToBePlaced--;
             }
 
@@ -110,7 +110,7 @@ public class MoveValidator {
         int currentRowIndex = board.getRowIndex(move.getPosition());
 
         for (int i = 0; i <= move.getTiles().size(); i++) {
-            while (isSquareOccupied(board, currentRowIndex, currentColIndex)) {
+            while (board.isSquareOccupied(currentRowIndex, currentColIndex)) {
                 if (move.isHorizontal()) {
                     currentColIndex++;
                 } else {
@@ -118,14 +118,14 @@ public class MoveValidator {
                 }
             }
             if (move.isHorizontal()) {
-                if (isSquareOccupiedAbove(board, currentRowIndex, currentColIndex) ||
-                        isSquareOccupiedBelow(board, currentRowIndex, currentColIndex)) {
+                if (board.isSquareOccupiedAbove(currentRowIndex, currentColIndex) ||
+                        board.isSquareOccupiedBelow(currentRowIndex, currentColIndex)) {
                     return false;
                 }
                 currentColIndex++;
             } else {
-                if (isSquareOccupiedRight(board, currentRowIndex, currentColIndex) ||
-                        isSquareOccupiedLeft(board, currentRowIndex, currentColIndex)) {
+                if (board.isSquareOccupiedRight(currentRowIndex, currentColIndex) ||
+                        board.isSquareOccupiedLeft(currentRowIndex, currentColIndex)) {
                     return false;
                 }
                 currentRowIndex++;
@@ -134,31 +134,6 @@ public class MoveValidator {
 
         }
         return true;
-    }
-
-    public boolean isSquareOccupiedAbove(Board board, int row, int col) {
-        return isSquareOccupied(board, row - 1, col);
-    }
-
-    public boolean isSquareOccupiedBelow(Board board, int row, int col) {
-        return isSquareOccupied(board, row + 1, col);
-    }
-
-
-    public boolean isSquareOccupiedLeft(Board board, int row, int col) {
-        return isSquareOccupied(board, row, col - 1);
-
-    }
-
-    public boolean isSquareOccupiedRight(Board board, int row, int col) {
-        return isSquareOccupied(board, row, col + 1);
-    }
-
-    public boolean isSquareOccupied(Board board, int row, int col) {
-        if (row < 0 || row >= board.getRows() || col < 0 || col >= board.getCols()) {
-            return false;
-        }
-        return board.getSquare(row, col).isSquareOccupied();
     }
 
     public boolean atLeastTwoTilesPlayed(Move move) {
@@ -188,41 +163,45 @@ public class MoveValidator {
     }
 
     public boolean connectToExistingTiles(Board board, Move move) {
-        int moveColIndex = board.getColumnIndex(move.getPosition());
-        int moveRowIndex = board.getRowIndex(move.getPosition());
+        int currentColIndex = board.getColumnIndex(move.getPosition());
+        int currentRowIndex = board.getRowIndex(move.getPosition());
         int tilesToPlace = move.getTiles().size();
         int tilesPlacedCounter = 0;
 
         // Check if tile directly before the move position. Horizontal (left) and Vertical (above)
         if (move.isHorizontal()) {
-            if (isSquareOccupied(board, moveRowIndex, moveColIndex - 1)) {
+            if (board.isSquareOccupiedLeft(currentRowIndex, currentColIndex)) {
                 return true;
             }
         } else {
-            if (isSquareOccupied(board, moveRowIndex - 1, moveColIndex)) {
+            if (board.isSquareOccupiedAbove(currentRowIndex, currentColIndex)) {
                 return true;
             }
         }
 
         while (tilesPlacedCounter < tilesToPlace) {
-            if (move.isHorizontal() && (isSquareOccupied(board, moveRowIndex - 1, moveColIndex)
-                    || isSquareOccupied(board, moveRowIndex + 1, moveColIndex))) {
-                return true;
-            } else if (!move.isHorizontal() && (isSquareOccupied(board, moveRowIndex, moveColIndex - 1)
-                    || isSquareOccupied(board, moveRowIndex, moveColIndex + 1))) {
-                return true;
+            if (move.isHorizontal()) {
+                if(board.isSquareOccupiedAbove(currentRowIndex, currentColIndex) ||
+                        board.isSquareOccupiedBelow( currentRowIndex, currentColIndex)) {
+                    return true;
+                }
+            } else {
+                if (board.isSquareOccupiedLeft( currentRowIndex, currentColIndex) ||
+                        board.isSquareOccupiedRight( currentRowIndex, currentColIndex)) {
+                    return true;
+                }
             }
             tilesPlacedCounter++;
 
             if (move.isHorizontal()) {
-                moveColIndex++;
+                currentColIndex++;
             } else {
-                moveRowIndex++;
+                currentRowIndex++;
             }
         }
         // Check if tile directly after the move position. Horizontal (right) and Vertical (below)
 
-        return isSquareOccupied(board, moveRowIndex, moveColIndex);
+        return board.isSquareOccupied(currentRowIndex, currentColIndex);
 
     }
 

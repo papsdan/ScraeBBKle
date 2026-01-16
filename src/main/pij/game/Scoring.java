@@ -39,16 +39,16 @@ public class Scoring {
         int wordMultiplier = 1;
 
         if(move.isHorizontal()){
-            while (wordStartColIndex >0 && board.getSquare(currentRowIndex, wordStartColIndex - 1).isSquareOccupied()) {
+            while (wordStartColIndex >0 && board.isSquareOccupiedLeft(currentRowIndex, wordStartColIndex)) {
                 wordStartColIndex--;
             }
         } else {
-            while (wordStartRowIndex >0 && board.getSquare(wordStartRowIndex - 1, currentColIndex).isSquareOccupied()) {
+            while (wordStartRowIndex >0 && board.isSquareOccupiedAbove(wordStartRowIndex, currentColIndex)) {
                 wordStartRowIndex--;
             }
         }
 
-        while(board.getSquare(wordStartRowIndex, wordStartColIndex).isSquareOccupied() || i < tiles.size()) {
+        while(board.isSquareOccupied(wordStartRowIndex, wordStartColIndex) || i < tiles.size()) {
             Square square = board.getSquare(wordStartRowIndex, wordStartColIndex);
             if (square.isSquareOccupied()) {
                 int tileValue = square.getTile().getValue();

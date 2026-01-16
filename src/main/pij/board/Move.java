@@ -76,12 +76,12 @@ public class Move {
         //FINDING THE START INDEX TO WORK OUT WHAT THE START OF THE WORD IS
         if (isHorizontal) {
             //check if any tiles to left to work out what the starting column index is of word
-            while (wordStartColIndex > 0 && board.getSquare(currentRowIndex, wordStartColIndex - 1).isSquareOccupied()) {
+            while (wordStartColIndex > 0 && board.isSquareOccupiedLeft(currentRowIndex, wordStartColIndex)) {
                 wordStartColIndex--;
             }
         } else {
             //check if any tiles above to work out what the starting row index is of word
-            while (wordStartRowIndex > 0 && board.getSquare(wordStartRowIndex - 1, currentColIndex).isSquareOccupied()) {
+            while (wordStartRowIndex > 0 && board.isSquareOccupiedRight(wordStartRowIndex, currentColIndex)) {
                 wordStartRowIndex--;
             }
         }
