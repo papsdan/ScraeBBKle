@@ -81,7 +81,7 @@ public class Move {
             }
         } else {
             //check if any tiles above to work out what the starting row index is of word
-            while (wordStartRowIndex > 0 && board.isSquareOccupiedRight(wordStartRowIndex, currentColIndex)) {
+            while (wordStartRowIndex > 0 && board.isSquareOccupiedAbove(wordStartRowIndex, currentColIndex)) {
                 wordStartRowIndex--;
             }
         }
@@ -97,6 +97,15 @@ public class Move {
                 completePreviewWord.append(tiles.get(tilesToBePlaced).getLetter());
                 tilesToBePlaced++;
             }
+            if(isHorizontal){
+                wordStartColIndex++;
+            } else {
+                wordStartRowIndex++;
+            }
+        }
+        while(board.isSquareOccupied(wordStartRowIndex, wordStartColIndex)) {
+            completePreviewWord.append(board.getSquare(wordStartRowIndex, wordStartColIndex).getTile().getLetter());
+
             if(isHorizontal){
                 wordStartColIndex++;
             } else {

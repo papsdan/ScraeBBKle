@@ -1,17 +1,24 @@
 package pij.board;
 
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import pij.tile.Tile;
 import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MoveTest {
+    private Board board;
+
+    @BeforeEach
+    void setUp() throws IOException {
+        this.board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
+    }
 
     @Test
     public void testVerticalMove() throws IOException {
-        Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
         List<Tile> tiles = List.of(
                 new Tile('D', 2),
                 new Tile('I', 1),
@@ -40,7 +47,6 @@ public class MoveTest {
     @Test
     public void testHorizontalMove() throws IOException {
 
-        Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
         List<Tile> tiles = List.of(
                 new Tile('T', 1),
                 new Tile('E', 2),
@@ -62,7 +68,6 @@ public class MoveTest {
 
     @Test
     public void testSkippingOccupiedSquare() throws IOException {
-        Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
 
         List<Tile> tiles = List.of(
                 new Tile('D', 2),
@@ -111,6 +116,34 @@ public class MoveTest {
 
     }
 
+    @Test
+    public void testPreviewWordAddingToFront() {
 
+        board.getSquareByPosition("8g").setTile(new Tile('A', 1));
+        board.getSquareByPosition("8h").setTile(new Tile('T', 1));
+        List<Tile> tilesToPlace = List.of(new Tile('C', 1),new Tile('H', 1));
+        Move move = new Move(board, "8e", tilesToPlace);
+        assertEquals("CHAT", move.previewWord());
+    }
+
+    @Test
+    public void testPreviewWordAddingToFrontAndBack() {
+        board.getSquareByPosition("8g").setTile(new Tile('N', 1));
+        board.getSquareByPosition("8h").setTile(new Tile('O', 1));
+        List<Tile> tilesToPlace = List.of(new Tile('S', 1),new Tile('W', 4));
+        Move move = new Move(board, "8f", tilesToPlace);
+        assertEquals("SNOW", move.previewWord());
+    }
+
+    @Test
+    public void testPreviewWordAddingToBack() {
+        board.getSquareByPosition("8g").setTile(new Tile('H', 4));
+        board.getSquareByPosition("8h").setTile(new Tile('E', 1));
+        board.getSquareByPosition("8i").setTile(new Tile('L', 1));
+        board.getSquareByPosition("8j").setTile(new Tile('L', 1));
+        List<Tile> tilesToPlace = List.of(new Tile('O', 1));
+        Move move = new Move(board, "8k", tilesToPlace);
+        assertEquals("HELLO", move.previewWord());
+    }
 
 }
