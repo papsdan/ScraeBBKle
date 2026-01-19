@@ -14,7 +14,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
-
+/**
+ * Main game controller for ScraeBBKle.
+ * Handles game setup, turn management, scoring and end game conditions.
+ */
 public class Game {
     private Board board;
     private Player player1;
@@ -26,6 +29,12 @@ public class Game {
     private int numberOfConsectivePasses;
     private boolean isFirstMove;
 
+
+    /**
+     * Constructs a new Game and initialises through user prompts including board selection, player types and game type (open/closed).
+     *
+     * @throws IOException if board file cannot be read
+     */
     public Game() throws IOException {
         Scanner sc = new Scanner(System.in);
         System.out.println("Would you like to _l_oad a board or use the _d_efault board?\n" +
@@ -35,17 +44,17 @@ public class Game {
             if (boardType == 'd') {
                 this.board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
             } else if (boardType == 'l') {
-                System.out.println("Please enter the file name of the board:");
-                while (this.board == null) {
-                    String fileName = sc.nextLine();
-                    try {
-                        this.board = BoardLoader.loadFromFile(fileName);
-                    } catch (IOException ex){
-                        System.out.println("File " + fileName + " does not exist. Please enter the file name of the board:");
-                    } catch (IllegalArgumentException ex) {
+                    System.out.println("Please enter the file name of the board:");
+                    while (this.board == null) {
+                        String fileName = sc.nextLine();
+                        try {
+                            this.board = BoardLoader.loadFromFile("resources/"+fileName);
+                        } catch (IOException ex){
+                            System.out.println("File " + fileName + " does not exist. Please enter the file name of the board:");
+                        } catch (IllegalArgumentException ex) {
                             System.out.println("This is not a valid file. Please enter the file name of the board:");
+                        }
                     }
-                }
             } else {
                 System.out.println("Invalid choice. Please enter l or d:");
             }
@@ -95,15 +104,23 @@ public class Game {
         this.isFirstMove = true;
     }
 
+    /**
+     * Checks if the game has ended.
+     * This happens when the tile bag is empty and a player has no tiles,
+     * or four consecutive passes have occurred.
+     *
+     * @return true if the game is over
+     */
     public boolean isGameOver() {
         return (this.tileBag.getRemainingTileCount() == 0 && (this.player1.getTileRack().getRackCount() == 0 || this.player2.getTileRack().getRackCount() == 0))
                 || this.numberOfConsectivePasses == 4;
     }
 
-    public boolean isFirstMove() {
-        return this.isFirstMove;
-    }
-
+    /**
+     * Runs the main game loop.
+     * Alternates turns between players until the game ends.
+     * Then calculates final scores and announces the winner.
+     */
     public void play() {
         while (!isGameOver()) {
 
