@@ -20,20 +20,24 @@ public class BoardLoader {
 
     private static Board parseContent(String fileContent) {
         String[] lines = fileContent.split("\n");
-        int columns = Integer.parseInt(lines[0].trim());
-        int rows = Integer.parseInt(lines[1].trim());
+        int expectedColumns = Integer.parseInt(lines[0].trim());
+        int expectedRows = Integer.parseInt(lines[1].trim());
         String startingPosition = lines[2].trim();
 
-        Board board = new Board(columns, rows, startingPosition);
+        if (lines.length - 3 != expectedRows) {
+            throw new IllegalArgumentException();
+        }
 
-        for (int row = 0; row < rows; row++) {
-            parseBoardRow(lines[row + 3], board, row);
+        Board board = new Board(expectedColumns, expectedRows, startingPosition);
+
+        for (int currentRow = 0; currentRow < expectedRows; currentRow++) {
+            parseBoardRow(lines[currentRow + 3], board, currentRow, expectedColumns);
         }
 
         return board;
     }
 
-    private static void parseBoardRow(String line, Board board, int currentRow) {
+    private static void parseBoardRow(String line, Board board, int currentRow, int expectedColumns) {
 
         int currentColumn = 0;
         for (int character = 0; character < line.length(); character++) {
@@ -59,6 +63,9 @@ public class BoardLoader {
                 currentColumn++;
                 character = endIndex;
             }
+        }
+        if (currentColumn != expectedColumns) {
+            throw new IllegalArgumentException();
         }
     }
 

@@ -10,6 +10,7 @@ import pij.player.Player;
 import pij.tile.Tile;
 import pij.tile.TileBag;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
@@ -35,8 +36,16 @@ public class Game {
                 this.board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
             } else if (boardType == 'l') {
                 System.out.println("Please enter the file name of the board:");
-                String fileName = sc.nextLine();
-                this.board = BoardLoader.loadFromFile(fileName);
+                while (this.board == null) {
+                    String fileName = sc.nextLine();
+                    try {
+                        this.board = BoardLoader.loadFromFile(fileName);
+                    } catch (IOException ex){
+                        System.out.println("File " + fileName + " does not exist. Please enter the file name of the board:");
+                    } catch (IllegalArgumentException ex) {
+                            System.out.println("This is not a valid file. Please enter the file name of the board:");
+                    }
+                }
             } else {
                 System.out.println("Invalid choice. Please enter l or d:");
             }
@@ -116,7 +125,7 @@ public class Game {
 
             Move input = this.currentPlayerTurn.makeMove(this.board);
 
-            while(!input.getIsPass() && !moveValidator.validateMove(input, this.board, this.isFirstMove)) {
+            while(!input.getIsPass() && !moveValidator.validateMove(input, this.board, this.isFirstMove,this.currentPlayerTurn)) {
                 input = this.currentPlayerTurn.makeMove(this.board);
             }
 
