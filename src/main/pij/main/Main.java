@@ -1,11 +1,14 @@
 package pij.main;
 
-import pij.tile.Tile;
+import pij.game.Game;
 
+import java.io.IOException;
+/**
+ * Starts the ScraeBBKle game.
+ */
 public class Main {
-    static void main(String[] args) {
-        Tile t = new Tile('a',2);
-        System.out.println(t.getLetter());
-        System.out.println(t.getValue());
+    static void main(String[] args) throws IOException {
+        Game game = new Game();
+        game.play();
     }
 }
