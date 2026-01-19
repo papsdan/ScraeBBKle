@@ -3,21 +3,41 @@ package pij.board;
 import pij.square.PremiumLetterSquare;
 import pij.square.PremiumWordSquare;
 import pij.square.RegularSquare;
-import pij.square.Square;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-
+/**
+ * Utility class for loading boards from files.
+ * Parses board configuration files and creates Board objects.
+ */
 public class BoardLoader {
+    /**
+     * Loads a board from a file.
+     *
+     * @param filePath the path to the board file
+     * @return the loaded Board object
+     * @throws IOException if the file cannot be read/found
+     * @throws IllegalArgumentException if the file format is invalid
+     */
     public static Board loadFromFile(String filePath) throws IOException {
         String content = Files.readString(Path.of(filePath));
         return parseContent(content);
     }
 
+    /**
+     * Parses the content of a board file and creates a Board object.
+     * File format:
+     * line 1 = number of columns
+     * line 2 = number of rows
+     * line 3 = starting position
+     * remaining lines = board rows with squares.
+     *
+     * @param fileContent the content of the board file
+     * @return the parsed Board object
+     * @throws IllegalArgumentException if the content is invalid
+     */
     private static Board parseContent(String fileContent) {
         String[] lines = fileContent.split("\n");
         int expectedColumns = Integer.parseInt(lines[0].trim());
@@ -36,7 +56,15 @@ public class BoardLoader {
 
         return board;
     }
-
+    /**
+     * Parses a single row of the board.
+     *
+     * @param line the line of text to parse
+     * @param board the board to add squares to
+     * @param currentRow the row index being parsed
+     * @param expectedColumns the expected number of columns / expected number of squares in the row
+     * @throws IllegalArgumentException if the row has incorrect number of columns
+     */
     private static void parseBoardRow(String line, Board board, int currentRow, int expectedColumns) {
 
         int currentColumn = 0;
