@@ -14,7 +14,7 @@ public class MoveValidator {
     private static HashSet<String> validWords;
 
     public MoveValidator() throws IOException {
-        if(validWords == null) {
+        if(validWords == null) { 
             String content = Files.readString(Path.of("resources/wordlist.txt"));
             String[] words = content.split("\n");
             this.validWords = new HashSet<>();
