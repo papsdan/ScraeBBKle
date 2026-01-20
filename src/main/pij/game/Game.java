@@ -143,6 +143,11 @@ public class Game {
             Move input = this.currentPlayerTurn.makeMove(this.board);
 
             while(!input.getIsPass() && !moveValidator.validateMove(input, this.board, this.isFirstMove,this.currentPlayerTurn)) {
+                for (Tile tile : input.getTiles()) {
+                    if(tile.isWildcard()){
+                        tile.resetWildcardLetter();
+                    }
+                }
                 input = this.currentPlayerTurn.makeMove(this.board);
             }
 

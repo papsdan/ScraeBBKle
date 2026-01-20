@@ -69,6 +69,15 @@ public class Tile {
             throw new RuntimeException("Wildcard letter already set");
         }
     }
+
+    /**
+     * Resets the wildcard letter and assigned boolean.
+     * This is in case a move is invalid and the wildcard had been set in an invalid move.
+     */
+    public void resetWildcardLetter() {
+        this.isWildcardAssigned = false;
+        this.letter = '_';
+    }
     /**
      * Returns a string representation of the tile in format [letter value] e.g. [A1].
      *

@@ -52,17 +52,19 @@ public class HumanPlayer extends Player {
                 char letter =  word.charAt(i);
 
                 if(Character.isLowerCase(letter)) {
-                    for (int j = 0; j < getTileRack().getRackCount(); j++) {
+                    for (int j = 0; j < tiles.size(); j++) {
                         if (tiles.get(j).isWildcard()){
                             tiles.get(j).setWildcardLetter(letter);
                             placedTiles.add(tiles.get(j));
+                            tiles.remove(j);
                             break;
                         }
                     }
                 } else {
-                    for (int j = 0; j < getTileRack().getRackCount(); j++) {
+                    for (int j = 0; j < tiles.size(); j++) {
                         if (tiles.get(j).getLetter() == letter) {
                             placedTiles.add(tiles.get(j));
+                            tiles.remove(j);
                             break;
                         }
                 }
