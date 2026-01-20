@@ -1,29 +1,26 @@
 package pij.board;
 
-import pij.game.Game;
-import pij.player.HumanPlayer;
 import pij.player.Player;
 import pij.tile.Tile;
-import pij.tile.TileBag;
-import pij.tile.TileRack;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 public class MoveValidator {
-    private final HashSet<String> validWords;
+    private static HashSet<String> validWords;
 
     public MoveValidator() throws IOException {
-        String content = Files.readString(Path.of("resources/wordlist.txt"));
-        String[] words = content.split("\n");
-        this.validWords = new HashSet<>();
-        for (String word : words) {
-            this.validWords.add(word.trim().toLowerCase());
+        if(validWords == null) {
+            String content = Files.readString(Path.of("resources/wordlist.txt"));
+            String[] words = content.split("\n");
+            this.validWords = new HashSet<>();
+            for (String word : words) {
+                this.validWords.add(word.trim().toLowerCase());
+            }
         }
     }
 
