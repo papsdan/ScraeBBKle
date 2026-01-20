@@ -121,7 +121,7 @@ public class Game {
      * Alternates turns between players until the game ends.
      * Then calculates final scores and announces the winner.
      */
-    public void play() {
+    public void play() throws IOException {
         while (!isGameOver()) {
 
             board.displayBoard();
