@@ -14,7 +14,7 @@ public class MoveValidator {
     private static HashSet<String> validWords;
 
     public MoveValidator() throws IOException {
-        if(validWords == null) { 
+        if(validWords == null) {
             String content = Files.readString(Path.of("resources/wordlist.txt"));
             String[] words = content.split("\n");
             this.validWords = new HashSet<>();
@@ -106,7 +106,7 @@ public class MoveValidator {
         int currentColIndex = board.getColumnIndex(move.getPosition());
         int currentRowIndex = board.getRowIndex(move.getPosition());
 
-        for (int i = 0; i <= move.getTiles().size(); i++) {
+        for (int i = 0; i < move.getTiles().size(); i++) {
             while (board.isSquareOccupied(currentRowIndex, currentColIndex)) {
                 if (move.isHorizontal()) {
                     currentColIndex++;
