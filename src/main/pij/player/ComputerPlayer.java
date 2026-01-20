@@ -41,21 +41,39 @@ public class ComputerPlayer extends Player {
                 }
                 List<Tile> rackTiles = this.getTileRack().getTiles();
                 for (Tile tile : rackTiles) {
-                    if (tile.isWildcard()) {
-                        continue;
-                    }
                     List<Tile> tilesToPlace = new ArrayList<>();
-                    tilesToPlace.add(tile);
-                    Move horizontalInput = new Move(board, horizontalPosition, tilesToPlace);
-                    if (moveValidator.validateMove(horizontalInput, board, false, this)) {
-                        System.out.println("trying " + tile.getLetter() + " at position "+ horizontalPosition);
-                        return horizontalInput;
+                    if (tile.isWildcard()) {
+                        tilesToPlace.add(tile);
+                        for (int i = 0; i < 26; i++) {
+                            System.out.println((char) ('a' + i));
+                            tile.setWildcardLetter((char) ('a' + i));
+                            Move horizontalInput = new Move(board, horizontalPosition, tilesToPlace);
+                            if (moveValidator.validateMove(horizontalInput, board, false, this)) {
+                                System.out.println("trying " + tile.getLetter() + " at position "+ horizontalPosition);
+                                return horizontalInput;
+                            }
+                            Move verticalInput = new Move(board, verticlePosition, tilesToPlace);
+                            if (moveValidator.validateMove(verticalInput, board, false, this)) {
+                                System.out.println("trying " + tile.getLetter() + " at position "+ verticlePosition);
+                                return verticalInput;
+                            }
+                            tile.resetWildcardLetter();
+
+                        }
+                    } else {
+                        tilesToPlace.add(tile);
+                        Move horizontalInput = new Move(board, horizontalPosition, tilesToPlace);
+                        if (moveValidator.validateMove(horizontalInput, board, false, this)) {
+                            System.out.println("trying " + tile.getLetter() + " at position "+ horizontalPosition);
+                            return horizontalInput;
+                        }
+                        Move verticalInput = new Move(board, verticlePosition, tilesToPlace);
+                        if (moveValidator.validateMove(verticalInput, board, false, this)) {
+                            System.out.println("trying " + tile.getLetter() + " at position "+ verticlePosition);
+                            return verticalInput;
+                        }
                     }
-                    Move verticalInput = new Move(board, verticlePosition, tilesToPlace);
-                    if (moveValidator.validateMove(verticalInput, board, false, this)) {
-                        System.out.println("trying " + tile.getLetter() + " at position "+ verticlePosition);
-                        return verticalInput;
-                    }
+
                 }
             }
         }
