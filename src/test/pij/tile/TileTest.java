@@ -1,9 +1,8 @@
 package pij.tile;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TileTest {
     @Test
@@ -28,8 +27,6 @@ public class TileTest {
         wildcardTile.setWildcardLetter('a');
         assertEquals('a',wildcardTile.getLetter());
         assertTrue(wildcardTile.isWildcard());
-        wildcardTile.setWildcardLetter('b');
-        assertEquals('a',wildcardTile.getLetter());
 
 
     }
@@ -49,5 +46,13 @@ public class TileTest {
 
     }
 
-
+    @Test
+    public void testWildcardReset() {
+        Tile wildcardTile = new Tile('_',8);
+        wildcardTile.setWildcardLetter('a');
+        assertEquals('a',wildcardTile.getLetter());
+        wildcardTile.resetWildcardLetter();
+        wildcardTile.setWildcardLetter('b');
+        assertEquals('b',wildcardTile.getLetter());
+    }
 }
