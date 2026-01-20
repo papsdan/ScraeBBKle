@@ -3,6 +3,7 @@ package pij.player;
 import pij.board.Board;
 import pij.board.BoardLoader;
 import pij.board.Move;
+import pij.game.Game;
 import pij.tile.Tile;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class HumanPlayer extends Player {
         super(playerName);
     }
     @Override
-    public Move makeMove(Board board) {
+    public Move makeMove(Board board, boolean isFirstMove) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Please enter your move in the format: \"word,square\" (without the quotes)\n" +
                 "For example, for suitable tile rack and board configuration, a downward move\n" +

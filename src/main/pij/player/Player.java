@@ -2,6 +2,7 @@ package pij.player;
 
 import pij.board.Board;
 import pij.board.Move;
+import pij.game.Game;
 import pij.tile.TileRack;
 
 import java.io.IOException;
@@ -64,6 +65,6 @@ public abstract class Player {
      * @param board the game board
      * @return the move to make
      */
-    public abstract Move makeMove(Board board) throws IOException;
+    public abstract Move makeMove(Board board, boolean isFirstMove) throws IOException;
 
 }

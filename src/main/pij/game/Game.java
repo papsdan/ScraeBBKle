@@ -140,7 +140,7 @@ public class Game {
             System.out.println("It's your turn, " + this.currentPlayerTurn.getPlayerName() + "! Your tiles:");
             System.out.println(this.currentPlayerTurn.getTileRack().getTiles());
 
-            Move input = this.currentPlayerTurn.makeMove(this.board);
+            Move input = this.currentPlayerTurn.makeMove(this.board,this.isFirstMove);
 
             while(!input.getIsPass() && !moveValidator.validateMove(input, this.board, this.isFirstMove,this.currentPlayerTurn)) {
                 for (Tile tile : input.getTiles()) {
@@ -148,7 +148,7 @@ public class Game {
                         tile.resetWildcardLetter();
                     }
                 }
-                input = this.currentPlayerTurn.makeMove(this.board);
+                input = this.currentPlayerTurn.makeMove(this.board,this.isFirstMove);
             }
 
 

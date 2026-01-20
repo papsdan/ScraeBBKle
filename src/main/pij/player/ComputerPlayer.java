@@ -4,6 +4,7 @@ import pij.board.Board;
 import pij.board.BoardLoader;
 import pij.board.Move;
 import pij.board.MoveValidator;
+import pij.game.Game;
 import pij.square.Square;
 import pij.tile.Tile;
 import pij.tile.TileBag;
@@ -25,7 +26,7 @@ public class ComputerPlayer extends Player {
 //    }
 
     @Override
-    public Move makeMove(Board board) throws IOException {
+    public Move makeMove(Board board,  boolean isFirstMove) throws IOException {
         MoveValidator moveValidator = new MoveValidator();
         for(int row = 0; row < board.getRows(); row++){
             for(int col = 0; col < board.getCols() ; col++) {
@@ -40,6 +41,9 @@ public class ComputerPlayer extends Player {
                     continue;
                 }
                 List<Tile> rackTiles = this.getTileRack().getTiles();
+
+                //if(game.)
+
                 for (Tile tile : rackTiles) {
                     List<Tile> tilesToPlace = new ArrayList<>();
                     if (tile.isWildcard()) {
