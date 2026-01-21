@@ -10,7 +10,6 @@ import pij.player.Player;
 import pij.tile.Tile;
 import pij.tile.TileBag;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
@@ -69,56 +68,71 @@ public class Game {
      */
     public void play() throws IOException {
         while (!isGameOver()) {
-
-            board.displayBoard();
-            System.out.println();
-            System.out.println("Start position: " + board.getStartingPosition());
-            Player opponentPlayer;
-            if (this.currentPlayerTurn == this.player1) {
-                opponentPlayer = this.player2;
-            } else {
-                opponentPlayer = this.player1;
-            }
-            if(this.gameType.equals("open")) {
-                System.out.println("OPEN GAME: " + opponentPlayer.getPlayerName() + " 's tiles:");
-                System.out.println("OPEN GAME: " + opponentPlayer.getTileRack().getTiles());
-            }
-            System.out.println("It's your turn, " + this.currentPlayerTurn.getPlayerName() + "! Your tiles:");
-            System.out.println(this.currentPlayerTurn.getTileRack().getTiles());
-
-            Move input = this.currentPlayerTurn.makeMove(this.board,this.isFirstMove);
-
-            while(!input.getIsPass() && !moveValidator.validateMove(input, this.board, this.isFirstMove,this.currentPlayerTurn)) {
-                for (Tile tile : input.getTiles()) {
-                    if(tile.isWildcard()){
-                        tile.resetWildcardLetter();
-                    }
-                }
-                input = this.currentPlayerTurn.makeMove(this.board,this.isFirstMove);
-            }
-
-            if (input.getIsPass()) {
-                this.numberOfConsectivePasses += 1;
-            } else {
-                Scoring score = new Scoring();
-                this.currentPlayerTurn.addScore(score.totalScore(input,this.board));
-                input.placeTile();
-                currentPlayerTurn.getTileRack().removeTiles(input.getTiles());
-                if(isFirstMove) {
-                    isFirstMove = false;
-                }
-                currentPlayerTurn.getTileRack().fillRack(this.tileBag);
-                this.numberOfConsectivePasses = 0;
-            }
-            System.out.println("Player 1 score: " + this.player1.getScore());
-            System.out.println("Player 2 score: " + this.player2.getScore());
+            Player opponentPlayer = getOpponentPlayer();
+            displayGameState(opponentPlayer);
+            Move input = getValidMove();
+            processMove(input);
             this.currentPlayerTurn = opponentPlayer;
-
-            System.out.println("Number of consecutive passes: " + this.numberOfConsectivePasses);
-            System.out.println(this.gameType);
-
         }
+        calculateFinalScores();
+        announceWinner();
+    }
 
+    /**
+     * Processes the validated move.
+     * If the move is not passed, it updates the scoring and refills the players rack with new tiles from the tile bag (up to 7 max)
+     * @param input the move to process
+     */
+    private void processMove(Move input) {
+        if (input.getIsPass()) {
+            this.numberOfConsectivePasses += 1;
+        } else {
+            Scoring score = new Scoring();
+            this.currentPlayerTurn.addScore(score.totalScore(input,this.board));
+            input.placeTile();
+            currentPlayerTurn.getTileRack().removeTiles(input.getTiles());
+            if(isFirstMove) {
+                isFirstMove = false;
+            }
+            currentPlayerTurn.getTileRack().fillRack(this.tileBag);
+            this.numberOfConsectivePasses = 0;
+        }
+        System.out.println("Player 1 score: " + this.player1.getScore());
+        System.out.println("Player 2 score: " + this.player2.getScore());
+    }
+
+    /**
+     * Displays the current game state including the board, start position, opponents tiles (if open game), and current players tiles.
+     * @param opponentPlayer the opponent of the current player
+     */
+    private void displayGameState(Player opponentPlayer) {
+        board.displayBoard();
+        System.out.println();
+        System.out.println("Start position: " + board.getStartingPosition());
+        if(this.gameType.equals("open")) {
+            System.out.println("OPEN GAME: " + opponentPlayer.getPlayerName() + " 's tiles:");
+            System.out.println("OPEN GAME: " + opponentPlayer.getTileRack().getTiles());
+        }
+        System.out.println("It's your turn, " + this.currentPlayerTurn.getPlayerName() + "! Your tiles:");
+        System.out.println(this.currentPlayerTurn.getTileRack().getTiles());
+    }
+    /**
+     * Returns the opponent of the current player.
+     *
+     * @return the opponent player
+     */
+    private Player getOpponentPlayer() {
+        if (this.currentPlayerTurn == this.player1) {
+            return this.player2;
+        } else {
+            return this.player1;
+        }
+    }
+    /**
+     * Calculates and displays the final scores for both players.
+     * It subtracts the value of remaining tiles values from each players score.
+     */
+    private void calculateFinalScores() {
         List<Tile> player1Tiles = player1.getTileRack().getTiles();
         List<Tile> player2Tiles = player2.getTileRack().getTiles();
 
@@ -134,6 +148,11 @@ public class Game {
         System.out.println("Game Over!");
         System.out.println(this.player1.getPlayerName() + " scored " + this.player1.getScore() + " points.");
         System.out.println(this.player2.getPlayerName() + " scored " + this.player2.getScore() + " points.");
+    }
+    /**
+     * Announces the winner based on final scores or will declares a draw if the scores are equal.
+     */
+    private void announceWinner() {
         if(this.player1.getScore() > this.player2.getScore()) {
             System.out.println(this.player1.getPlayerName() + " wins!");
         } else if(this.player2.getScore() > this.player1.getScore()) {
@@ -141,10 +160,31 @@ public class Game {
         } else {
             System.out.println("It's a draw!");
         }
-
-
     }
+    /**
+     * Asks the current player for a move and validates it using the MoveValidator class.
+     * Will continue prompting the player until a valid move or a pass is entered.
+     * @return a valid move
+     * @throws IOException if there is an error reading input
+     */
+    private Move getValidMove() throws IOException {
+        Move input = this.currentPlayerTurn.makeMove(this.board,this.isFirstMove);
 
+        while(!input.getIsPass() && !moveValidator.validateMove(input, this.board, this.isFirstMove,this.currentPlayerTurn)) {
+            for (Tile tile : input.getTiles()) {
+                if(tile.isWildcard()){
+                    tile.resetWildcardLetter();
+                }
+            }
+            input = this.currentPlayerTurn.makeMove(this.board,this.isFirstMove);
+        }
+        return input;
+    }
+    /**
+     * Prompts the user to select a board (default or load custom file).
+     * @param sc the scanner for user input
+     * @throws IOException if the board file cannot be read
+     */
     private void setupBoard(Scanner sc) throws IOException {
         System.out.println("Would you like to _l_oad a board or use the _d_efault board?\n" +
                 "Please enter your choice (l/d):");
@@ -169,8 +209,11 @@ public class Game {
             }
         }
     }
-
-    private void setupPlayers(Scanner sc) throws IOException {
+    /**
+     * Prompts the user to select player types for player 1 and player 2 (human or computer).
+     * @param sc the scanner for user input
+     */
+    private void setupPlayers(Scanner sc) {
         System.out.println("Is Player 1 a _h_uman player or a _c_omputer player?\n" +
                 "Please enter your choice (h/c):");
         while (this.player1 == null || this.player2 == null) {
@@ -196,8 +239,11 @@ public class Game {
             }
         }
     }
-
-    private void setupGameType(Scanner sc) throws IOException {
+    /**
+     * Prompts the user to select the game type (open or closed).
+     * @param sc the scanner for user input
+     */
+    private void setupGameType(Scanner sc) {
         System.out.println("Would you like to play an _o_pen or a _c_losed game?\n" +
                 "Please enter your choice (o/c):");
         while (this.gameType == null) {
@@ -211,11 +257,5 @@ public class Game {
             }
         }
     }
-    public static void main(String[] args) throws IOException {
-        Game game = new Game();
 
-
-        game.play();
-
-    }
 }
