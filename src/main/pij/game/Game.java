@@ -37,64 +37,10 @@ public class Game {
      */
     public Game() throws IOException {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Would you like to _l_oad a board or use the _d_efault board?\n" +
-                "Please enter your choice (l/d):");
-        while (this.board == null) {
-            char boardType = sc.nextLine().charAt(0);
-            if (boardType == 'd') {
-                this.board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
-            } else if (boardType == 'l') {
-                    System.out.println("Please enter the file name of the board:");
-                    while (this.board == null) {
-                        String fileName = sc.nextLine();
-                        try {
-                            this.board = BoardLoader.loadFromFile("resources/"+fileName);
-                        } catch (IOException ex){
-                            System.out.println("File " + fileName + " does not exist. Please enter the file name of the board:");
-                        } catch (IllegalArgumentException ex) {
-                            System.out.println("This is not a valid file. Please enter the file name of the board:");
-                        }
-                    }
-            } else {
-                System.out.println("Invalid choice. Please enter l or d:");
-            }
-        }
-        System.out.println("Is Player 1 a _h_uman player or a _c_omputer player?\n" +
-                "Please enter your choice (h/c):");
-        while (this.player1 == null || this.player2 == null) {
-            char playerType = sc.nextLine().charAt(0);
-            if (playerType == 'h') {
-                if (this.player1 == null) {
-                    this.player1 = new HumanPlayer("Player 1");
-                    System.out.println("Is Player 2 a _h_uman player or a _c_omputer player?\n" +
-                            "Please enter your choice (h/c):");
-                } else {
-                    this.player2 = new HumanPlayer("Player 2");
-                }
-            } else if (playerType == 'c') {
-                if (this.player1 == null) {
-                    this.player1 = new ComputerPlayer("Player 1");
-                    System.out.println("Is Player 2 a _h_uman player or a _c_omputer player?\n" +
-                            "Please enter your choice (h/c):");
-                } else {
-                    this.player2 = new ComputerPlayer("Player 2");
-                }
-            } else {
-                System.out.println("Invalid choice. Please enter h or c:");
-            }
-        }
-        System.out.println("Would you like to play an _o_pen or a _c_losed game?\n" +
-                "Please enter your choice (o/c):");
-        while (this.gameType == null) {
-            char open_or_closed = sc.nextLine().charAt(0);
-            if (open_or_closed == 'o') {
-                this.gameType = "open";
-            } else if (open_or_closed == 'c') {
-                this.gameType = "closed";
-            } else {
-                System.out.println("Invalid choice. Please enter o or c:");
-            }
-        }
+        setupBoard(sc);
+        setupPlayers(sc);
+        setupGameType(sc);
+
         this.tileBag = new TileBag();
         this.moveValidator = new MoveValidator();
         this.currentPlayerTurn = this.player1;
@@ -151,7 +97,6 @@ public class Game {
                 input = this.currentPlayerTurn.makeMove(this.board,this.isFirstMove);
             }
 
-
             if (input.getIsPass()) {
                 this.numberOfConsectivePasses += 1;
             } else {
@@ -198,6 +143,73 @@ public class Game {
         }
 
 
+    }
+
+    private void setupBoard(Scanner sc) throws IOException {
+        System.out.println("Would you like to _l_oad a board or use the _d_efault board?\n" +
+                "Please enter your choice (l/d):");
+        while (this.board == null) {
+            char boardType = sc.nextLine().charAt(0);
+            if (boardType == 'd') {
+                this.board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
+            } else if (boardType == 'l') {
+                System.out.println("Please enter the file name of the board:");
+                while (this.board == null) {
+                    String fileName = sc.nextLine();
+                    try {
+                        this.board = BoardLoader.loadFromFile("resources/"+fileName);
+                    } catch (IOException ex){
+                        System.out.println("File " + fileName + " does not exist. Please enter the file name of the board:");
+                    } catch (IllegalArgumentException ex) {
+                        System.out.println("This is not a valid file. Please enter the file name of the board:");
+                    }
+                }
+            } else {
+                System.out.println("Invalid choice. Please enter l or d:");
+            }
+        }
+    }
+
+    private void setupPlayers(Scanner sc) throws IOException {
+        System.out.println("Is Player 1 a _h_uman player or a _c_omputer player?\n" +
+                "Please enter your choice (h/c):");
+        while (this.player1 == null || this.player2 == null) {
+            char playerType = sc.nextLine().charAt(0);
+            if (playerType == 'h') {
+                if (this.player1 == null) {
+                    this.player1 = new HumanPlayer("Player 1");
+                    System.out.println("Is Player 2 a _h_uman player or a _c_omputer player?\n" +
+                            "Please enter your choice (h/c):");
+                } else {
+                    this.player2 = new HumanPlayer("Player 2");
+                }
+            } else if (playerType == 'c') {
+                if (this.player1 == null) {
+                    this.player1 = new ComputerPlayer("Player 1");
+                    System.out.println("Is Player 2 a _h_uman player or a _c_omputer player?\n" +
+                            "Please enter your choice (h/c):");
+                } else {
+                    this.player2 = new ComputerPlayer("Player 2");
+                }
+            } else {
+                System.out.println("Invalid choice. Please enter h or c:");
+            }
+        }
+    }
+
+    private void setupGameType(Scanner sc) throws IOException {
+        System.out.println("Would you like to play an _o_pen or a _c_losed game?\n" +
+                "Please enter your choice (o/c):");
+        while (this.gameType == null) {
+            char open_or_closed = sc.nextLine().charAt(0);
+            if (open_or_closed == 'o') {
+                this.gameType = "open";
+            } else if (open_or_closed == 'c') {
+                this.gameType = "closed";
+            } else {
+                System.out.println("Invalid choice. Please enter o or c:");
+            }
+        }
     }
     public static void main(String[] args) throws IOException {
         Game game = new Game();
