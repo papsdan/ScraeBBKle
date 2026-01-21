@@ -189,10 +189,10 @@ public class Game {
         System.out.println("Would you like to _l_oad a board or use the _d_efault board?\n" +
                 "Please enter your choice (l/d):");
         while (this.board == null) {
-            char boardType = sc.nextLine().charAt(0);
-            if (boardType == 'd') {
+            String boardType = sc.nextLine();
+            if (boardType.equals("d")) {
                 this.board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
-            } else if (boardType == 'l') {
+            } else if (boardType.equals("l")) {
                 System.out.println("Please enter the file name of the board:");
                 while (this.board == null) {
                     String fileName = sc.nextLine();
@@ -217,8 +217,8 @@ public class Game {
         System.out.println("Is Player 1 a _h_uman player or a _c_omputer player?\n" +
                 "Please enter your choice (h/c):");
         while (this.player1 == null || this.player2 == null) {
-            char playerType = sc.nextLine().charAt(0);
-            if (playerType == 'h') {
+            String playerType = sc.nextLine();
+            if (playerType.equals("h")) {
                 if (this.player1 == null) {
                     this.player1 = new HumanPlayer("Player 1");
                     System.out.println("Is Player 2 a _h_uman player or a _c_omputer player?\n" +
@@ -226,7 +226,7 @@ public class Game {
                 } else {
                     this.player2 = new HumanPlayer("Player 2");
                 }
-            } else if (playerType == 'c') {
+            } else if (playerType.equals("c")) {
                 if (this.player1 == null) {
                     this.player1 = new ComputerPlayer("Player 1");
                     System.out.println("Is Player 2 a _h_uman player or a _c_omputer player?\n" +
@@ -247,10 +247,10 @@ public class Game {
         System.out.println("Would you like to play an _o_pen or a _c_losed game?\n" +
                 "Please enter your choice (o/c):");
         while (this.gameType == null) {
-            char open_or_closed = sc.nextLine().charAt(0);
-            if (open_or_closed == 'o') {
+            String open_or_closed = sc.nextLine();
+            if (open_or_closed.equals("o")) {
                 this.gameType = "open";
-            } else if (open_or_closed == 'c') {
+            } else if (open_or_closed.equals("c")) {
                 this.gameType = "closed";
             } else {
                 System.out.println("Invalid choice. Please enter o or c:");
