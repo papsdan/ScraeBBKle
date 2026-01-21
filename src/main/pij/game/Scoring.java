@@ -15,6 +15,46 @@ import java.util.List;
 public class Scoring {
 
     /**
+     * Get the column index for the start of the word.
+     * If the move is horizontal, it checks for occupied tiles to the left of
+     * the current position. If so, it backtracks (decrements the column index) until it finds
+     * the start of the word.
+     * @param currentColIndex the column index of the moves starting position
+     * @param currentRowIndex the row index of the moves starting position
+     * @param board game board to check for occupied squares
+     * @param isHorizontal true if the move is horizontal, false if vertical
+     * @return the column index where the word begins
+     */
+    private int getWordStartColIndex(int currentColIndex,int currentRowIndex,Board board,boolean isHorizontal){
+        if(isHorizontal){
+            while (currentColIndex >0 && board.isSquareOccupiedLeft(currentRowIndex, currentColIndex)) {
+                currentColIndex--;
+            }
+        }
+        return currentColIndex;
+    }
+
+    /**
+     * Get the row index for the start of the word.
+     * If the move is vertical (not horizontal), it checks for occupied tiles above
+     * the current position. If so, it backtracks (decrements the row index) until it finds
+     * the start of the word.
+     * @param currentColIndex the column index of the moves starting position
+     * @param currentRowIndex the row index of the moves starting position
+     * @param board game board to check for occupied squares
+     * @param isHorizontal true if the move is horizontal, false if vertical
+     * @return the row index where the word begins
+     */
+    private int getWordStartRowIndex(int currentColIndex,int currentRowIndex,Board board,boolean isHorizontal){
+        if(!isHorizontal){
+            while (currentRowIndex >0 && board.isSquareOccupiedAbove(currentRowIndex, currentColIndex)) {
+                currentRowIndex--;
+            }
+        }
+        return currentRowIndex;
+    }
+
+    /**
      * Calculates the total score for a move.
      *
      * @param move the move to score
@@ -27,30 +67,20 @@ public class Scoring {
         int currentColIndex = board.getColumnIndex(move.getPosition());
         int currentRowIndex = board.getRowIndex(move.getPosition());
 
-        int wordStartColIndex = currentColIndex;
-        int wordStartRowIndex = currentRowIndex;
+        int wordStartColIndex = getWordStartColIndex(currentColIndex,currentRowIndex,board,move.isHorizontal());
+        int wordStartRowIndex = getWordStartRowIndex(currentColIndex,currentRowIndex,board,move.isHorizontal());
 
         List<Tile> tiles = move.getTiles();
-        int i = 0;
+        int tilesPlacedCount = 0;
         int wordMultiplier = 1;
 
-        if(move.isHorizontal()){
-            while (wordStartColIndex >0 && board.isSquareOccupiedLeft(currentRowIndex, wordStartColIndex)) {
-                wordStartColIndex--;
-            }
-        } else {
-            while (wordStartRowIndex >0 && board.isSquareOccupiedAbove(wordStartRowIndex, currentColIndex)) {
-                wordStartRowIndex--;
-            }
-        }
-
-        while(board.isSquareOccupied(wordStartRowIndex, wordStartColIndex) || i < tiles.size()) {
+        while(board.isSquareOccupied(wordStartRowIndex, wordStartColIndex) || tilesPlacedCount < tiles.size()) {
             Square square = board.getSquare(wordStartRowIndex, wordStartColIndex);
             if (square.isSquareOccupied()) {
                 int tileValue = square.getTile().getValue();
                 score += tileValue;
             } else {
-                int tileValue = tiles.get(i).getValue();
+                int tileValue = tiles.get(tilesPlacedCount).getValue();
                 SquareType squareType = square.getSquareType();
                 if(squareType.equals(SquareType.PREMIUM_WORD)) {
                     score += tileValue;
@@ -60,7 +90,7 @@ public class Scoring {
                 } else {
                     score += tileValue;
                 }
-                i++;
+                tilesPlacedCount++;
             }
 
             if (move.isHorizontal()) {
