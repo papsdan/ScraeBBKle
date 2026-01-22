@@ -50,15 +50,9 @@ public class ComputerPlayer extends Player {
                             System.out.println((char) ('a' + i));
                             tile.setWildcardLetter((char) ('a' + i));
 
-
-                            Move horizontalInput = getMove(board, horizontalPosition, tilesToPlace, moveValidator);
-                            if (horizontalInput != null) {
-                                return horizontalInput;
-                            }
-
-                            Move verticalInput = getMove(board, verticalPosition, tilesToPlace, moveValidator);
-                            if (verticalInput != null) {
-                                return verticalInput;
+                            Move move = tryBothDirectionMoves(board, horizontalPosition, verticalPosition, moveValidator, tilesToPlace,false);
+                            if (move != null) {
+                                return move;
                             }
 
                             tile.resetWildcardLetter();
@@ -67,15 +61,11 @@ public class ComputerPlayer extends Player {
                     } else {
                         tilesToPlace.add(tile);
 
-                        Move horizontalInput = getMove(board, horizontalPosition, tilesToPlace, moveValidator);
-                        if (horizontalInput != null) {
-                            return horizontalInput;
+                        Move move = tryBothDirectionMoves(board, horizontalPosition, verticalPosition, moveValidator, tilesToPlace,false);
+                        if (move != null) {
+                            return move;
                         }
 
-                        Move verticalInput = getMove(board, verticalPosition, tilesToPlace, moveValidator);
-                        if (verticalInput != null) {
-                            return verticalInput;
-                        }
                     }
 
                 }
@@ -84,9 +74,22 @@ public class ComputerPlayer extends Player {
         return new Move();
     }
 
-    private Move getMove(Board board, String position, List<Tile> tilesToPlace, MoveValidator moveValidator) {
+    private Move tryBothDirectionMoves(Board board,String horizontalPosition, String verticalPosition, MoveValidator moveValidator,List<Tile> tilesToPlace, boolean isFirstMove) {
+        Move horizontalInput = getMove(board, horizontalPosition, tilesToPlace, moveValidator,isFirstMove);
+        if (horizontalInput != null) {
+            return horizontalInput;
+        }
+
+        Move verticalInput = getMove(board, verticalPosition, tilesToPlace, moveValidator,isFirstMove);
+        if (verticalInput != null) {
+            return verticalInput;
+        }
+        return null;
+    }
+
+    private Move getMove(Board board, String position, List<Tile> tilesToPlace, MoveValidator moveValidator, boolean isFirstMove) {
         Move input = new Move(board, position, tilesToPlace);
-        if (moveValidator.validateMove(input, board, false, this)) {
+        if (moveValidator.validateMove(input, board, isFirstMove, this)) {
             return input;
         }
         return null;
@@ -110,16 +113,11 @@ public class ComputerPlayer extends Player {
                 tilesToPlace.add(rackTiles.get(i));
                 tilesToPlace.add(rackTiles.get(j));
 
-                Move horizontalInput = new Move(board, horizontalPosition, tilesToPlace);
-
-                if (moveValidator.validateMove(horizontalInput, board, true, this)) {
-                    return horizontalInput;
+                Move move = tryBothDirectionMoves(board, horizontalPosition, verticalPosition, moveValidator, tilesToPlace, true);
+                if (move != null) {
+                    return move;
                 }
 
-                Move verticalInput = new Move(board, verticalPosition, tilesToPlace);
-                if (moveValidator.validateMove(verticalInput, board, true, this)) {
-                    return verticalInput;
-                }
             }
         }
         return new Move();
