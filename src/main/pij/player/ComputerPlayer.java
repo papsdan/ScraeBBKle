@@ -4,16 +4,11 @@ import pij.board.Board;
 import pij.board.BoardLoader;
 import pij.board.Move;
 import pij.board.MoveValidator;
-import pij.game.Game;
-import pij.square.Square;
 import pij.tile.Tile;
-import pij.tile.TileBag;
-import pij.tile.TileRack;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class ComputerPlayer extends Player {
 
@@ -28,10 +23,41 @@ public class ComputerPlayer extends Player {
     @Override
     public Move makeMove(Board board,  boolean isFirstMove) throws IOException {
         MoveValidator moveValidator = new MoveValidator();
+
+        if(isFirstMove) {
+            int startCol = board.getColumnIndex(board.getStartingPosition());
+            int startRow = board.getRowIndex(board.getStartingPosition());
+
+            String verticalPosition = getVerticleCoordinateString(startRow, startCol);
+            String horizontalPosition = getHorizontalCoordinateString(startRow, startCol);
+
+            List<Tile> rackTiles = this.getTileRack().getTiles();
+
+            for (int i = 0; i < rackTiles.size(); i++) {
+                for (int j = 0; j < rackTiles.size(); j++) {
+                    List<Tile> tilesToPlace = new ArrayList<>();
+                    tilesToPlace.add(rackTiles.get(i));
+                    tilesToPlace.add(rackTiles.get(j));
+
+                    Move horizontalInput = new Move(board, horizontalPosition, tilesToPlace);
+
+                    if (moveValidator.validateMove(horizontalInput, board, true, this)) {
+                        return horizontalInput;
+                    }
+
+                    Move verticalInput = new Move(board, verticalPosition, tilesToPlace);
+                    if (moveValidator.validateMove(verticalInput, board, true, this)) {
+                        return verticalInput;
+                    }
+                }
+            }
+            return new Move();
+        }
+
         for(int row = 0; row < board.getRows(); row++){
             for(int col = 0; col < board.getCols() ; col++) {
 
-                String verticlePosition = getVerticleCoordinateString(row, col);
+                String verticalPosition = getVerticleCoordinateString(row, col);
                 String horizontalPosition = getHorizontalCoordinateString(row, col);
                 if (board.isSquareOccupied(row, col)) {
                     continue;
@@ -41,8 +67,6 @@ public class ComputerPlayer extends Player {
                     continue;
                 }
                 List<Tile> rackTiles = this.getTileRack().getTiles();
-
-                //if(game.)
 
                 for (Tile tile : rackTiles) {
                     List<Tile> tilesToPlace = new ArrayList<>();
@@ -56,9 +80,9 @@ public class ComputerPlayer extends Player {
                                 System.out.println("trying " + tile.getLetter() + " at position "+ horizontalPosition);
                                 return horizontalInput;
                             }
-                            Move verticalInput = new Move(board, verticlePosition, tilesToPlace);
+                            Move verticalInput = new Move(board, verticalPosition, tilesToPlace);
                             if (moveValidator.validateMove(verticalInput, board, false, this)) {
-                                System.out.println("trying " + tile.getLetter() + " at position "+ verticlePosition);
+                                System.out.println("trying " + tile.getLetter() + " at position "+ verticalPosition);
                                 return verticalInput;
                             }
                             tile.resetWildcardLetter();
@@ -71,9 +95,9 @@ public class ComputerPlayer extends Player {
                             System.out.println("trying " + tile.getLetter() + " at position "+ horizontalPosition);
                             return horizontalInput;
                         }
-                        Move verticalInput = new Move(board, verticlePosition, tilesToPlace);
+                        Move verticalInput = new Move(board, verticalPosition, tilesToPlace);
                         if (moveValidator.validateMove(verticalInput, board, false, this)) {
-                            System.out.println("trying " + tile.getLetter() + " at position "+ verticlePosition);
+                            System.out.println("trying " + tile.getLetter() + " at position "+ verticalPosition);
                             return verticalInput;
                         }
                     }
@@ -96,14 +120,4 @@ public class ComputerPlayer extends Player {
         return "" + rowNumber + colLetter;
     }
 
-
-    static void main(String[] args) throws IOException {
-        Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
-        ComputerPlayer computerPlayer = new ComputerPlayer("Compu)terPlayer");
-        System.out.println(computerPlayer.getHorizontalCoordinateString(0, 0));
-        System.out.println(board.getSquareByPosition("a1").getDisplayString());
-        System.out.println(board.getSquare(0,0).getDisplayString());
-        System.out.println(board.getSquareByPosition("1a"));
-
-    }
 }
