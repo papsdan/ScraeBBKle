@@ -25,33 +25,7 @@ public class ComputerPlayer extends Player {
         MoveValidator moveValidator = new MoveValidator();
 
         if(isFirstMove) {
-            int startCol = board.getColumnIndex(board.getStartingPosition());
-            int startRow = board.getRowIndex(board.getStartingPosition());
-
-            String verticalPosition = getVerticleCoordinateString(startRow, startCol);
-            String horizontalPosition = getHorizontalCoordinateString(startRow, startCol);
-
-            List<Tile> rackTiles = this.getTileRack().getTiles();
-
-            for (int i = 0; i < rackTiles.size(); i++) {
-                for (int j = 0; j < rackTiles.size(); j++) {
-                    List<Tile> tilesToPlace = new ArrayList<>();
-                    tilesToPlace.add(rackTiles.get(i));
-                    tilesToPlace.add(rackTiles.get(j));
-
-                    Move horizontalInput = new Move(board, horizontalPosition, tilesToPlace);
-
-                    if (moveValidator.validateMove(horizontalInput, board, true, this)) {
-                        return horizontalInput;
-                    }
-
-                    Move verticalInput = new Move(board, verticalPosition, tilesToPlace);
-                    if (moveValidator.validateMove(verticalInput, board, true, this)) {
-                        return verticalInput;
-                    }
-                }
-            }
-            return new Move();
+            return makeFirstMove(board, moveValidator);
         }
 
         for(int row = 0; row < board.getRows(); row++){
@@ -107,6 +81,40 @@ public class ComputerPlayer extends Player {
         }
         return new Move();
     }
+
+    private Move makeFirstMove(Board board, MoveValidator moveValidator) {
+        int startCol = board.getColumnIndex(board.getStartingPosition());
+        int startRow = board.getRowIndex(board.getStartingPosition());
+
+        String verticalPosition = getVerticleCoordinateString(startRow, startCol);
+        String horizontalPosition = getHorizontalCoordinateString(startRow, startCol);
+
+        List<Tile> rackTiles = this.getTileRack().getTiles();
+
+        for (int i = 0; i < rackTiles.size(); i++) {
+            for (int j = 0; j < rackTiles.size(); j++) {
+                if(i == j) {
+                    continue;
+                }
+                List<Tile> tilesToPlace = new ArrayList<>();
+                tilesToPlace.add(rackTiles.get(i));
+                tilesToPlace.add(rackTiles.get(j));
+
+                Move horizontalInput = new Move(board, horizontalPosition, tilesToPlace);
+
+                if (moveValidator.validateMove(horizontalInput, board, true, this)) {
+                    return horizontalInput;
+                }
+
+                Move verticalInput = new Move(board, verticalPosition, tilesToPlace);
+                if (moveValidator.validateMove(verticalInput, board, true, this)) {
+                    return verticalInput;
+                }
+            }
+        }
+        return new Move();
+    }
+
 
     public String getVerticleCoordinateString(int row, int col) {
         char colLetter = (char) ('a' + col);
