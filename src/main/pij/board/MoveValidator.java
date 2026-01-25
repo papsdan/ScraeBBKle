@@ -117,7 +117,7 @@ public class MoveValidator {
      * @param board the game board
      * @return true if the move is within bounds, false if not
      */
-    public boolean isWithinBoard(Move move, Board board) {
+    private boolean isWithinBoard(Move move, Board board) {
 
         int currentColIndex = board.getColumnIndex(move.getPosition());
         int currentRowIndex = board.getRowIndex(move.getPosition());
@@ -156,7 +156,7 @@ public class MoveValidator {
      * @param move the move to check
      * @return true if only one word is formed, false if not
      */
-    public boolean isSingleWord(Board board, Move move) {
+    private boolean isSingleWord(Board board, Move move) {
         int currentColIndex = board.getColumnIndex(move.getPosition());
         int currentRowIndex = board.getRowIndex(move.getPosition());
 
@@ -193,7 +193,7 @@ public class MoveValidator {
      * @param move the move to check
      * @return true if two or more tiles are played, false if not
      */
-    public boolean atLeastTwoTilesPlayed(Move move) {
+    private boolean atLeastTwoTilesPlayed(Move move) {
         return move.getTiles().size() >= 2;
     }
 
@@ -204,7 +204,7 @@ public class MoveValidator {
      * @param move the move to check
      * @return true if the starting square is used, false if not
      */
-    public boolean usesStartingSquare(Board board, Move move) {
+    private boolean usesStartingSquare(Board board, Move move) {
         int moveColIndex = board.getColumnIndex(move.getPosition());
         int moveRowIndex = board.getRowIndex(move.getPosition());
         int startColIndex = board.getColumnIndex(board.getStartingPosition());
@@ -233,7 +233,7 @@ public class MoveValidator {
      * @param move the move to check
      * @return true if the move connects to existing tiles, false if not
      */
-    public boolean connectToExistingTiles(Board board, Move move) {
+    private boolean connectToExistingTiles(Board board, Move move) {
         int currentColIndex = board.getColumnIndex(move.getPosition());
         int currentRowIndex = board.getRowIndex(move.getPosition());
         int tilesToPlace = move.getTiles().size();
@@ -283,7 +283,7 @@ public class MoveValidator {
      * @param player the player making the move
      * @return true if all tiles are in the rack, false if not
      */
-    public boolean tilesPlayedInRack(Move move, Player player) {
+    private boolean tilesPlayedInRack(Move move, Player player) {
 
         List<Tile> tileRackCopy = new ArrayList<>(player.getTileRack().getTiles());
         List<Tile> moveTiles = move.getTiles();
