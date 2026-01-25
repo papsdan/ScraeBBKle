@@ -35,6 +35,7 @@ public class Game {
      * @throws IOException if board file cannot be read
      */
     public Game() throws IOException {
+        displayGameHeader();
         Scanner sc = new Scanner(System.in);
         setupBoard(sc);
         setupPlayers(sc);
@@ -67,6 +68,7 @@ public class Game {
      * Then calculates final scores and announces the winner.
      */
     public void play() throws IOException {
+
         while (!isGameOver()) {
             Player opponentPlayer = getOpponentPlayer();
             displayGameState(opponentPlayer);
@@ -97,7 +99,7 @@ public class Game {
             }
             currentPlayerTurn.getTileRack().fillRack(this.tileBag);
             this.numberOfConsecutivePasses = 0;
-            System.out.println("The move is: " + input.getWord() + " at position " +  input.getPosition());
+            System.out.println("The move is: Letters: " + input.getWord() + " at position " +  input.getPosition());
         }
         System.out.println("Player 1 score: " + this.player1.getScore());
         System.out.println("Player 2 score: " + this.player2.getScore());
@@ -112,11 +114,16 @@ public class Game {
         System.out.println();
         System.out.println("Start position: " + board.getStartingPosition());
         if(this.gameType.equals("open")) {
-            System.out.println("OPEN GAME: " + opponentPlayer.getPlayerName() + " 's tiles:");
+            System.out.println("OPEN GAME: " + opponentPlayer.getPlayerName() + "'s tiles:");
             System.out.println("OPEN GAME: " + opponentPlayer.getTileRack().getTiles());
         }
-        System.out.println("It's your turn, " + this.currentPlayerTurn.getPlayerName() + "! Your tiles:");
-        System.out.println(this.currentPlayerTurn.getTileRack().getTiles());
+        String currentPlayerClass = this.currentPlayerTurn.getClass().getSimpleName();
+        if(currentPlayerClass.equals("HumanPlayer")) {
+            System.out.println("It's your turn, " + this.currentPlayerTurn.getPlayerName() + "! Your tiles:");
+            System.out.println(this.currentPlayerTurn.getTileRack().getTiles());
+        } else {
+            System.out.println("It's your turn, " + this.currentPlayerTurn.getPlayerName() + "!");
+        }
     }
     /**
      * Returns the opponent of the current player.
@@ -146,7 +153,7 @@ public class Game {
             int value = tile.getValue();
             player2.addScore(-value);
         }
-
+        System.out.println();
         System.out.println("Game Over!");
         System.out.println(this.player1.getPlayerName() + " scored " + this.player1.getScore() + " points.");
         System.out.println(this.player2.getPlayerName() + " scored " + this.player2.getScore() + " points.");
@@ -258,6 +265,13 @@ public class Game {
                 System.out.println("Invalid choice. Please enter o or c:");
             }
         }
+    }
+
+    private void displayGameHeader(){
+        System.out.println("============                     ============");
+        System.out.println("============ S c r a e B B K l e ============");
+        System.out.println("============                     ============");
+        System.out.println();
     }
 
 }
