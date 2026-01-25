@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class ComputerPlayer extends Player {
     /**
-     * Constructs a new ConmputerPlayer with specified name.
+     * Constructs a new ComputerPlayer with specified name.
      * @param playerName the name of the player
      */
     public ComputerPlayer(String playerName) {
@@ -25,7 +25,7 @@ public class ComputerPlayer extends Player {
     /**
      * Makes a move by searching for valid single tile moves on the board.
      * If it is the first move, it tries all 2 tile combinations to meet move validation rules.
-     * For non first moves, it tries single tiles at positions adjacent to any existing tiles on the baord.
+     * For non first moves, it tries single tiles at positions adjacent to any existing tiles on the board.
      *
      * @param board the game board
      * @param isFirstMove true if it is the first move of the game
