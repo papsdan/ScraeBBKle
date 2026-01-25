@@ -86,6 +86,7 @@ public class Game {
     private void processMove(Move input) {
         if (input.getIsPass()) {
             this.numberOfConsectivePasses += 1;
+            System.out.println("The move is: Pass Move!");
         } else {
             Scoring score = new Scoring();
             this.currentPlayerTurn.addScore(score.totalScore(input,this.board));
@@ -96,6 +97,7 @@ public class Game {
             }
             currentPlayerTurn.getTileRack().fillRack(this.tileBag);
             this.numberOfConsectivePasses = 0;
+            System.out.println("The move is: " + input.getWord() + " at position " +  input.getPosition());
         }
         System.out.println("Player 1 score: " + this.player1.getScore());
         System.out.println("Player 2 score: " + this.player2.getScore());
@@ -170,7 +172,7 @@ public class Game {
     private Move getValidMove() throws IOException {
         Move input = this.currentPlayerTurn.makeMove(this.board,this.isFirstMove);
 
-        while(!input.getIsPass() && !moveValidator.validateMove(input, this.board, this.isFirstMove,this.currentPlayerTurn)) {
+        while(!input.getIsPass() && !moveValidator.validateMove(input, this.board, this.isFirstMove,this.currentPlayerTurn,true)) {
             for (Tile tile : input.getTiles()) {
                 if(tile.isWildcard()){
                     tile.resetWildcardLetter();

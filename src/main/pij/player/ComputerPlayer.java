@@ -1,7 +1,6 @@
 package pij.player;
 
 import pij.board.Board;
-import pij.board.BoardLoader;
 import pij.board.Move;
 import pij.board.MoveValidator;
 import pij.tile.Tile;
@@ -15,10 +14,6 @@ public class ComputerPlayer extends Player {
     public ComputerPlayer(String playerName) {
         super(playerName);
     }
-//    @Override
-//    public Move makeMove(Board board) {
-//            return new Move();
-//    }
 
     @Override
     public Move makeMove(Board board,  boolean isFirstMove) throws IOException {
@@ -47,7 +42,6 @@ public class ComputerPlayer extends Player {
                     if (tile.isWildcard()) {
                         tilesToPlace.add(tile);
                         for (int i = 0; i < 26; i++) {
-                            System.out.println((char) ('a' + i));
                             tile.setWildcardLetter((char) ('a' + i));
 
                             Move move = tryBothDirectionMoves(board, horizontalPosition, verticalPosition, moveValidator, tilesToPlace,false);
@@ -89,7 +83,7 @@ public class ComputerPlayer extends Player {
 
     private Move getMove(Board board, String position, List<Tile> tilesToPlace, MoveValidator moveValidator, boolean isFirstMove) {
         Move input = new Move(board, position, tilesToPlace);
-        if (moveValidator.validateMove(input, board, isFirstMove, this)) {
+        if (moveValidator.validateMove(input, board, isFirstMove, this,false)) {
             return input;
         }
         return null;
