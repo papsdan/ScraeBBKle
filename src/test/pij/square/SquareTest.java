@@ -66,7 +66,7 @@ public class SquareTest {
 
     @Test
     public void testOccupiedSquareDisplay(){
-        Tile tile = new Tile('a',1);
+        Tile tile = new Tile('A',1);
 
         PremiumLetterSquare square1 = new PremiumLetterSquare(12);
         assertEquals("12.", square1.getDisplayString());
