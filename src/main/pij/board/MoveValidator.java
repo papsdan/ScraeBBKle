@@ -10,20 +10,39 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * Validates moves based on game rules:
+ */
 public class MoveValidator {
     private static HashSet<String> validWords;
 
+
+    /**
+     * Constructs a new MoveValidator and loads the word dictionary. Only done once to avoid word dictionary creation each time
+     *
+     * @throws IOException if the wordlist file cannot be read
+     */
     public MoveValidator() throws IOException {
         if(validWords == null) {
             String content = Files.readString(Path.of("resources/wordlist.txt"));
             String[] words = content.split("\n");
-            this.validWords = new HashSet<>();
+            validWords = new HashSet<>();
             for (String word : words) {
-                this.validWords.add(word.trim().toLowerCase());
+                validWords.add(word.trim().toLowerCase());
             }
         }
     }
 
+    /**
+     * Validates a move based on all game rules.
+     *
+     * @param move the move to validate
+     * @param board the game board
+     * @param isFirstMove true if this is the first move of the game
+     * @param currentPlayer the player making the move
+     * @param showValidationErrorMessage true to print error messages, false for no error messages
+     * @return true if the move is valid, false if not
+     */
     public boolean validateMove(Move move, Board board, boolean isFirstMove, Player currentPlayer, boolean showValidationErrorMessage) {
 
         if (move.getIsPass()) {
@@ -81,10 +100,23 @@ public class MoveValidator {
         return true;
     }
 
+    /**
+     * Checks if the word in the move exists in the dictionary.
+     *
+     * @param word the word to check
+     * @return true if the word is valid, false if not
+     */
     public boolean isValidWord(String word) {
-        return this.validWords.contains(word.toLowerCase());
+        return validWords.contains(word.toLowerCase());
     }
 
+    /**
+     * Checks if the move stays within board boundaries.
+     *
+     * @param move the move to check
+     * @param board the game board
+     * @return true if the move is within bounds, false if not
+     */
     public boolean isWithinBoard(Move move, Board board) {
 
         int currentColIndex = board.getColumnIndex(move.getPosition());
@@ -116,6 +148,14 @@ public class MoveValidator {
         return true;
     }
 
+
+    /**
+     * Checks if the move creates only a single word only.
+     *
+     * @param board the game board
+     * @param move the move to check
+     * @return true if only one word is formed, false if not
+     */
     public boolean isSingleWord(Board board, Move move) {
         int currentColIndex = board.getColumnIndex(move.getPosition());
         int currentRowIndex = board.getRowIndex(move.getPosition());
@@ -147,10 +187,23 @@ public class MoveValidator {
         return true;
     }
 
+    /**
+     * Checks if at least two tiles are played - used for first move logic in validateMove method.
+     *
+     * @param move the move to check
+     * @return true if two or more tiles are played, false if not
+     */
     public boolean atLeastTwoTilesPlayed(Move move) {
         return move.getTiles().size() >= 2;
     }
 
+    /**
+     * Checks if the move uses the starting square - used for first move logic in validateMove method.
+     *
+     * @param board the game board
+     * @param move the move to check
+     * @return true if the starting square is used, false if not
+     */
     public boolean usesStartingSquare(Board board, Move move) {
         int moveColIndex = board.getColumnIndex(move.getPosition());
         int moveRowIndex = board.getRowIndex(move.getPosition());
@@ -173,6 +226,13 @@ public class MoveValidator {
         return false;
     }
 
+    /**
+     * Checks if the move connects to existing tiles on the board.
+     *
+     * @param board the game board
+     * @param move the move to check
+     * @return true if the move connects to existing tiles, false if not
+     */
     public boolean connectToExistingTiles(Board board, Move move) {
         int currentColIndex = board.getColumnIndex(move.getPosition());
         int currentRowIndex = board.getRowIndex(move.getPosition());
@@ -216,13 +276,20 @@ public class MoveValidator {
 
     }
 
+    /**
+     * Checks if all tiles in the move are available to play from the players tile rack.
+     *
+     * @param move the move to check
+     * @param player the player making the move
+     * @return true if all tiles are in the rack, false if not
+     */
     public boolean tilesPlayedInRack(Move move, Player player) {
 
         List<Tile> tileRackCopy = new ArrayList<>(player.getTileRack().getTiles());
         List<Tile> moveTiles = move.getTiles();
 
-        for (int i = 0; i < moveTiles.size(); i++) {
-            char mTile = moveTiles.get(i).getLetter();
+        for (Tile moveTile : moveTiles) {
+            char mTile = moveTile.getLetter();
             boolean isLetterFound = false;
             for (int j = 0; j < tileRackCopy.size(); j++) {
                 char trTiles = tileRackCopy.get(j).getLetter();
