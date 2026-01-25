@@ -91,7 +91,7 @@ public class HumanPlayer extends Player {
     private String getValidInput(Scanner sc) {
         System.out.println("Please enter your move in the format: \"word,square\" (without the quotes)\n" +
                 "For example, for suitable tile rack and board configuration, a downward move\n" +
-                "could be \"HI,f4\" and a rightward move could be \"HI,4f\".\n" +
+                "could be \"HI,f4\" and a rightward move could be \"HI,4f\".\n\n" +
                 "In the word, upper-case letters are standard tiles and lower-case letters\n" +
                 "are wildcards.\n" +
                 "Entering \",\" passes the turn.");
@@ -101,7 +101,7 @@ public class HumanPlayer extends Player {
             System.out.println("Illegal move format");
             System.out.println("Please enter your move in the format: \"word,square\" (without the quotes)\n" +
                     "For example, for suitable tile rack and board configuration, a downward move\n" +
-                    "could be \"HI,f4\" and a rightward move could be \"HI,4f\".\n" +
+                    "could be \"HI,f4\" and a rightward move could be \"HI,4f\".\n\n" +
                     "In the word, upper-case letters are standard tiles and lower-case letters\n" +
                     "are wildcards.\n" +
                     "Entering \",\" passes the turn.");
