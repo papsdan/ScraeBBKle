@@ -75,7 +75,6 @@ public class Move {
                 }
             }
         }
-        System.out.println(word);
     }
 
     /**
