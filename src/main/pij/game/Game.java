@@ -25,7 +25,7 @@ public class Game {
     private MoveValidator moveValidator;
     private Player currentPlayerTurn;
     private String gameType;
-    private int numberOfConsectivePasses;
+    private int numberOfConsecutivePasses;
     private boolean isFirstMove;
 
 
@@ -43,7 +43,7 @@ public class Game {
         this.tileBag = new TileBag();
         this.moveValidator = new MoveValidator();
         this.currentPlayerTurn = this.player1;
-        this.numberOfConsectivePasses = 0;
+        this.numberOfConsecutivePasses = 0;
         this.player1.getTileRack().fillRack(this.tileBag);
         this.player2.getTileRack().fillRack(this.tileBag);
         this.isFirstMove = true;
@@ -58,7 +58,7 @@ public class Game {
      */
     public boolean isGameOver() {
         return (this.tileBag.getRemainingTileCount() == 0 && (this.player1.getTileRack().getRackCount() == 0 || this.player2.getTileRack().getRackCount() == 0))
-                || this.numberOfConsectivePasses == 4;
+                || this.numberOfConsecutivePasses == 4;
     }
 
     /**
@@ -85,7 +85,7 @@ public class Game {
      */
     private void processMove(Move input) {
         if (input.getIsPass()) {
-            this.numberOfConsectivePasses += 1;
+            this.numberOfConsecutivePasses += 1;
             System.out.println("The move is: Pass Move!");
         } else {
             Scoring score = new Scoring();
@@ -96,7 +96,7 @@ public class Game {
                 isFirstMove = false;
             }
             currentPlayerTurn.getTileRack().fillRack(this.tileBag);
-            this.numberOfConsectivePasses = 0;
+            this.numberOfConsecutivePasses = 0;
             System.out.println("The move is: " + input.getWord() + " at position " +  input.getPosition());
         }
         System.out.println("Player 1 score: " + this.player1.getScore());
@@ -152,7 +152,7 @@ public class Game {
         System.out.println(this.player2.getPlayerName() + " scored " + this.player2.getScore() + " points.");
     }
     /**
-     * Announces the winner based on final scores or will declares a draw if the scores are equal.
+     * Announces the winner based on final scores or will declare a draw if the scores are equal.
      */
     private void announceWinner() {
         if(this.player1.getScore() > this.player2.getScore()) {
