@@ -96,9 +96,4 @@ public class BoardLoader {
             throw new IllegalArgumentException();
         }
     }
-
-    public static void main(String[] args) throws IOException {
-        Board board = BoardLoader.loadFromFile("resources/defaultBoard.txt");
-        board.displayBoard();
-    }
 }
