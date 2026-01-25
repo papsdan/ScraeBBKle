@@ -165,7 +165,7 @@ public class ComputerPlayer extends Player {
      * @param col the column index
      * @return the vertical position string
      */
-    public String getVerticalCoordinateString(int row, int col) {
+    private String getVerticalCoordinateString(int row, int col) {
         char colLetter = (char) ('a' + col);
         int rowNumber = row + 1;
         return "" + colLetter + rowNumber;
@@ -177,7 +177,7 @@ public class ComputerPlayer extends Player {
      * @param col the column index
      * @return the horizontal position string
      */
-    public String getHorizontalCoordinateString(int row, int col) {
+    private String getHorizontalCoordinateString(int row, int col) {
         char colLetter = (char) ('a' + col);
         int rowNumber = row + 1;
         return "" + rowNumber + colLetter;
