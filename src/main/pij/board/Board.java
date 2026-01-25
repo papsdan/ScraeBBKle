@@ -154,7 +154,7 @@ public class Board {
     /**
      * Displays the column index (a-z) surrounding the board
      */
-    public void displayColumnIndex() {
+    private void displayColumnIndex() {
         System.out.println();
         System.out.print("     ");
         for (int i = 0; i < this.cols; i++) {
@@ -166,7 +166,7 @@ public class Board {
     /**
      * Displays the row index (1-99) surrounding the board
      */
-    public void displayRowIndex(int row) {
+    private void displayRowIndex(int row) {
         if (row < 9) {
             System.out.print(" " + (row + 1) + " ");
         } else {
