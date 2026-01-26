@@ -115,12 +115,17 @@ public class Game {
         System.out.println("Start position: " + board.getStartingPosition());
         if(this.gameType.equals("open")) {
             System.out.println("OPEN GAME: " + opponentPlayer.getPlayerName() + "'s tiles:");
-            System.out.println("OPEN GAME: " + opponentPlayer.getTileRack().getTiles());
+//            System.out.println("OPEN GAME: " + opponentPlayer.getTileRack().getTiles());
+            List<Tile> opponentTiles = opponentPlayer.getTileRack().getTiles();
+            System.out.println("OPEN GAME: " + String.join(",", opponentTiles.stream().map(Tile::toString).toList()));
         }
         String currentPlayerClass = this.currentPlayerTurn.getClass().getSimpleName();
         if(currentPlayerClass.equals("HumanPlayer")) {
             System.out.println("It's your turn, " + this.currentPlayerTurn.getPlayerName() + "! Your tiles:");
-            System.out.println(this.currentPlayerTurn.getTileRack().getTiles());
+//            System.out.println(this.currentPlayerTurn.getTileRack().getTiles());
+            List<Tile> currentPlayerTiles = currentPlayerTurn.getTileRack().getTiles();
+            System.out.println(String.join(",", currentPlayerTiles.stream().map(Tile::toString).toList()));
+
         } else {
             System.out.println("It's your turn, " + this.currentPlayerTurn.getPlayerName() + "!");
         }
