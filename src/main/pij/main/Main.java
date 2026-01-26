@@ -7,7 +7,7 @@ import java.io.IOException;
  * Starts the ScraeBBKle game.
  */
 public class Main {
-    static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
         Game game = new Game();
         game.play();
     }
