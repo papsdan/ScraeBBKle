@@ -39,5 +39,21 @@ public class BoardTest {
         assertEquals("-4.", board.getSquareByPosition("1m").getDisplayString());
     }
 
+    @Test
+    public void testInvalidBoardLoading() throws IOException {
+        assertThrows(IllegalArgumentException.class, () -> BoardLoader.loadFromFile("resources/invalidBoard.txt"));
+    }
+
+    @Test
+    public void testValidBoardLoading() throws IOException {
+        assertDoesNotThrow(() -> BoardLoader.loadFromFile("resources/defaultBoard.txt"));
+    }
+
+    @Test
+    public void testBoardNotFound() throws IOException {
+        assertThrows(IOException.class, () -> BoardLoader.loadFromFile("resources/nonExistentBoard.txt"));
+    }
+
+
 }
 
