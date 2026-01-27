@@ -112,7 +112,6 @@ public class Move {
         while (tilesToBePlaced < this.tiles.size()) {
             Square square = board.getSquare(wordStartRowIndex, wordStartColIndex);
             if(square.isSquareOccupied()) {
-                //System.out.println("index " + wordStartRowIndex + ", " + wordStartColIndex + " is occupied by "  + square.getTile().getLetter());
                 completePreviewWord.append(square.getTile().getLetter());
             } else {
                 completePreviewWord.append(tiles.get(tilesToBePlaced).getLetter());
